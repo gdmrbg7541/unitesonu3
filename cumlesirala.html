@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> تمرين ترتيب الجمل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Temel Sayfa Stilleri --- */
+        :root {
+            --accent-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --bg-light: #f8f9fa;
+            --font-arabic: 'Markazi Text', 'Noto Naskh Arabic', 'Tahoma', 'Arial', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font-arabic);
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-weight: 400;
+            touch-action: none;
+            transition: background-color 0.3s;
+        }
+
+        body.fullscreen {
+            background-color: #000;
+        }
+
+        /* --- BAŞLANGIÇ EKRANI --- */
+        #start-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        #start-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 3rem;
+            font-family: var(--font-arabic);
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.6);
+            animation: pulse-btn 1.5s infinite;
+        }
+        @keyframes pulse-btn {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(40, 167, 69, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        /* --- CİHAZ DÖNDÜRME UYARISI (Dikey Mod Kilidi) --- */
+        #rotate-message {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #2c3e50; 
+            z-index: 9999; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .phone-animation {
+            width: 60px; height: 100px;
+            border: 4px solid white;
+            border-radius: 10px;
+            animation: rotate-phone 2s infinite ease-in-out;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .phone-animation::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 50%;
+            transform: translateX(-50%);
+            width: 20%; height: 4px;
+            background: white;
+            border-radius: 2px;
+        }
+        @keyframes rotate-phone {
+            0% { transform: rotate(0deg); opacity: 1; }
+            25% { transform: rotate(90deg); opacity: 1; }
+            70% { transform: rotate(90deg); opacity: 1; }
+            100% { transform: rotate(90deg); opacity: 0; }
+        }
+        .rotate-text { font-size: 2rem; font-family: var(--font-arabic); }
+
+        @media only screen and (max-width: 900px) and (orientation: portrait) {
+            #rotate-message { display: flex; }
+            .activity-container { display: none !important; } 
+            #start-overlay { display: none !important; }
+        }
+
+        /* --- ANA KONTEYNER --- */
+        .activity-container {
+            position: relative;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            
+            /* Varsayılan 16:9 Masaüstü Oranı */
+            width: 90vw;
+            height: calc(90vw * 9 / 16);
+            max-height: 90vh;
+            max-width: calc(90vh * 16 / 9);
+            
+            transition: all 0.3s ease; 
+        }
+
+        /* --- TAM EKRAN MODU (Hem Mobil Hem Masaüstü İçin Geçerli) --- */
+        body.fullscreen .activity-container, .activity-container.mobile-fullscreen {
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important; /* Mobilde adres çubuğunu hesaba kat */
+            max-width: none !important;
+            max-height: none !important;
+            border-radius: 0 !important;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        
+        /* --- HEADER (Masaüstü Düzeni Korundu) --- */
+        .header {
+            padding: 10px 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: grid;
+            /* Soldan Sağa: İlerleme | Başlık | Butonlar */
+            /* RTL olduğu için görsel olarak: Sağda İlerleme, Ortada Başlık, Solda Butonlar */
+            grid-template-areas: "progress instruction back"; 
+            grid-template-columns: 200px 1fr 200px;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+            background: white;
+            height: 70px; /* Sabit yükseklik */
+        }
+        
+        /* Mobilde Header Sıkışırsa Düzenleme */
+        @media (max-width: 800px) {
+            .header {
+                grid-template-columns: 120px 1fr 120px; /* Daha dar kolonlar */
+                padding: 5px 10px;
+                height: 60px;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container { 
+            grid-area: progress;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+            width: 100%;
+            direction: ltr; /* İlerleme soldan sağa */
+        }
+        #progress-display {
+            font-size: 1.2rem; 
+            font-weight: bold;
+            color: var(--accent-color);
+            flex-shrink: 0;
+        }
+        .progress-bar-container {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.4s ease;
+        }
+
+        /* Instruction Text */
+        #instruction-text { 
+            grid-area: instruction;
+            text-align: center; 
+            font-size: 1.8rem; 
+            font-weight: 700;
+            color: #555;
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Back Buttons */
+        .back-button-container {
+            grid-area: back;
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 10px;
+        }
+        .back-button, #fullscreen-btn {
+            background: #f0f0f0;
+            color: #555;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 40px; height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0; 
+            text-decoration: none;
+        }
+        .back-button:hover, #fullscreen-btn:hover { background: #e0e0e0; }
+        .back-button svg, #fullscreen-btn svg { width: 22px; height: 22px; fill: currentColor; }
+        
+        #fullscreen-btn .icon-open { display: block; }
+        #fullscreen-btn .icon-close { display: none; }
+        body.fullscreen #fullscreen-btn .icon-open { display: none; }
+        body.fullscreen #fullscreen-btn .icon-close { display: block; }
+
+        /* --- ETKİNLİK ALANI --- */
+        .activity-area {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .scramble-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between; /* Dikeyde yay */
+        }
+        
+        .drop-zone, .drag-zone {
+            border: 2px dashed #d0d0d0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 100px; /* Biraz küçülttük ki mobilde sığsın */
+            background: var(--bg-light);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center; 
+            flex-grow: 1; 
+            transition: background-color 0.3s, border-color 0.3s; 
+            gap: 10px; 
+            justify-content: center;
+        }
+        .drop-zone {
+            border-style: solid;
+            border-color: var(--accent-color);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .drop-zone-correct {
+            border-color: var(--success-color);
+            background-color: #f0f9f2; 
+        }
+        .drop-zone-incorrect {
+            border-color: var(--danger-color);
+            background-color: #fcf2f2; 
+            animation: shake 0.4s ease-in-out;
+        }
+        
+        /* KELİME KARTLARI (Ölçeklenebilir Font - vmin kullanarak) */
+        .word-item {
+            padding: 10px 18px;
+            color: white;
+            font-size: 2rem; /* Masaüstü için varsayılan */
+            font-weight: 700;
+            margin: 6px;
+            border-radius: 8px;
+            cursor: grab; 
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            line-height: 1.4; 
+            display: inline-block;
+        }
+        .word-item[draggable="true"]:active { cursor: grabbing; }
+        .word-item:hover { filter: brightness(85%); }
+        .word-item.dragging { opacity: 0.5; cursor: grabbing; }
+
+        /* Mobilde Font Boyutunu Dinamik Yap */
+        @media (max-width: 900px) {
+             .word-item {
+                 font-size: clamp(1.2rem, 6vmin, 2rem); /* Ekran küçüldükçe yazı da küçülür */
+                 padding: 6px 12px;
+             }
+        }
+        
+        /* KONTROLLER (Controls) */
+        .scramble-controls {
+            position: relative; 
+            display: flex; justify-content: center; align-items: center; 
+            margin-top: 10px; flex-shrink: 0; min-height: 60px; width: 100%; 
+        }
+
+        #check-scramble-btn, #reset-scramble-btn {
+            padding: 10px 25px;
+            font-size: 1.5rem; 
+            font-family: var(--font-arabic);
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            color: white;
+        }
+        #check-scramble-btn { background-color: var(--success-color); }
+        #reset-scramble-btn { background-color: var(--danger-color); }
+        
+        .disabled-btn { opacity: 0.4; cursor: not-allowed !important; pointer-events: none; filter: grayscale(100%); }
+
+        #next-activity-btn {
+            background-color: var(--accent-color); color: white;
+            padding: 0; border: none;
+            width: 60px; height: 60px; border-radius: 50%; 
+            display: none; align-items: center; justify-content: center;
+            margin: 5px; cursor: pointer;
+        }
+        #next-activity-btn svg { width: 30px; height: 30px; fill: currentColor; }
+
+        #hint-btn {
+            background-color: #ffc107; color: #333;
+            border: none; border-radius: 50%;
+            width: 60px; height: 60px;
+            font-size: 2rem; cursor: pointer;
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            display: flex; visibility: hidden; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+            animation: pulse 1.5s infinite; z-index: 10; 
+        }
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); }
+            70% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+        
+        #finish-screen {
+            text-align: center; font-weight: 700; color: var(--accent-color);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100%; font-family: var(--font-arabic);
+        }
+        #finish-screen p { font-size: 3rem; margin: 10px 0; }
+        .score-display { display: flex; gap: 30px; font-size: 2.5rem; margin: 20px 0; direction: ltr; }
+        .score-item { font-weight: 700; }
+        .score-correct { color: var(--success-color); }
+        .score-incorrect { color: var(--danger-color); }
+        #replay-button {
+            font-size: 4rem; background: none; border: none; cursor: pointer;
+            padding: 10px; border-radius: 50%;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            font-family: var(--font-arabic);
+        }
+        #replay-button:hover { transform: rotate(-90deg); background-color: #f0f0f0; }
+
+        /* ============================================================
+           MOBİL YATAY (LANDSCAPE) - SADECE ÖLÇEKLENDİRME
+           Masaüstü düzenini bozmadan sığdırma kuralları
+           ============================================================ */
+        @media only screen and (max-height: 600px) and (orientation: landscape) {
+            /* Konteyner ekrana sığacak şekilde tam boyut */
+            .activity-container {
+                width: 100vw;
+                height: 100dvh; /* Adres çubuğunu hesaba kat */
+                border-radius: 0;
+                max-width: none;
+                max-height: none;
+            }
+            
+            /* Yazıları biraz küçült ama yapı aynı kalsın */
+            .header {
+                height: 50px;
+                padding: 5px 15px;
+                gap: 10px;
+            }
+            #instruction-text { font-size: 1.4rem; }
+            
+            .drop-zone, .drag-zone {
+                min-height: 60px;
+                padding: 5px;
+                margin: 5px 0;
+            }
+            
+            /* Butonlar biraz küçülsün */
+            #check-scramble-btn, #reset-scramble-btn {
+                font-size: 1.1rem;
+                padding: 8px 20px;
+            }
+            
+            /* İpucu ve İleri butonu */
+            #hint-btn, #next-activity-btn {
+                width: 45px; height: 45px;
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="rotate-message">
+        <div class="phone-animation"></div>
+        <div class="rotate-text">يُرجى تدوير الجهاز</div> 
+    </div>
+
+    <div id="start-overlay">
+        <div style="margin-bottom: 20px; font-size: 1.5rem;">اضْغَطْ لِلْبَدْءِ</div>
+        <button id="start-btn">ابدأ</button>
+    </div>
+
+    <div class="activity-container">
+        
+        <div class="header">
+            <div class="progress-container">
+                <div id="progress-display">...</div> 
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            
+            <div id="instruction-text">...</div>
+
+            <div class="back-button-container">
+                <button id="fullscreen-btn">
+                    <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M5 10h2V7h3V5H5v5zM14 5v2h3v3h2V5h-5zM5 19v-5h2v3h3v2H5zM14 19v-2h3v-3h2v5h-5z"/>
+                    </svg>
+                    <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+                    </svg>
+                </button>
+                
+                <a href="index.html" class="back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="activity-area" id="activity-area">
+            </div>
+
+    </div>
+
+    <script>
+        const startOverlay = document.getElementById('start-overlay');
+        const startBtn = document.getElementById('start-btn');
+
+        startBtn.addEventListener('click', () => {
+            startOverlay.style.display = 'none';
+            initAudioContext();
+            const docEl = document.documentElement;
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen().catch(err => console.log(err));
+            } else if (docEl.webkitRequestFullscreen) { 
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.msRequestFullscreen) { 
+                docEl.msRequestFullscreen();
+            }
+        });
+
+        // --- ETKİNLİK VERİLERİ ---
+         const activitiesData = [
+    { 
+        s: ["أُفَضِّلُ كُرَة القَدَم عَلى السِّباحَة", "أُفَضِّلُ السِّباحَة عَلى كُرَة القَدَم"], 
+        w: ["أُفَضِّلُ", "السِّباحَة", "عَلى", "كُرَة", "القَدَم"] 
+    },
+    { 
+        s: ["هِوايَتي الاِسْتِماع إِلى الموسيقى", "الاِسْتِماع إِلى الموسيقى هِوايَتي"], 
+        w: ["هِوايَتي", "الاِسْتِماع", "إِلى", "الموسيقى"] 
+    },
+    { 
+        s: [
+            "أُفَضِّلُ الرِّمايَة عَلى قِراءَة الكُتُب", 
+            "أُفَضِّلُ قِراءَة الكُتُب عَلى الرِّمايَة"
+        ], 
+        w: ["أُفَضِّلُ", "قِراءَة", "الكُتُب", "عَلى", "الرِّمايَة"] 
+    },
+    { 
+        s: ["أُفَضِّلُ الرَّسْم عَلى المَسْرَح", "أُفَضِّلُ الرَّسْم عَلى المَسْرَح"], 
+        w: ["أُفَضِّلُ", "الرَّسْم", "عَلى", "المَسْرَح"] 
+    },
+    { 
+        s: ["أُفَضِّلُ كُرَة السَّلَّة"], 
+        w: ["أُفَضِّلُ", "كُرَة", "السَّلَّة"] 
+    },
+    { 
+        s: ["أُفَضِّلُ كُرَة القَدَم"], 
+        w: ["أُفَضِّلُ", "كُرَة", "القَدَم"] 
+    },
+    { 
+        s: ["تُمارِس الرَّسْم في الحَديقَة"], 
+        w: ["تُمارِس", "الرَّسْم", "في", "الحَديقَة"] 
+    },
+    { 
+        s: ["يَقْرَأُ الكِتاب في الحَديقَة"], 
+        w: ["يَقْرَأُ", "الكِتاب", "في", "الحَديقَة"] 
+    },
+    { 
+        s: [
+            "أَنا مَريض عِنْدي صُداع شَديد وَكُحَّة", 
+            "أَنا مَريض عِنْدي كُحَّة وَصُداع شَديد"
+        ], 
+        w: ["أَنا", "مَريض", "عِنْدي", "صُداع", "شَديد", "وَ", "كُحَّة"] 
+    },
+    { 
+        s: ["لا ما عِنْدي مَغْص في بطني"], 
+        w: ["لا", "ما", "عِنْدي", "مَغْص", "في", "بطني"] 
+    },
+    { 
+        s: ["يَجِب عَلَيْكَ أَنْ تَتَناوَل هذا الدَّواء"], 
+        w: ["يَجِب", "عَلَيْكَ", "أَنْ", "تَتَناوَل", "هذا", "الدَّواء"] 
+    },
+    { 
+        s: ["لا تَشْرَبْ ماءً بارِدًا"], 
+        w: ["لا", "تَشْرَبْ", "ماءً", "بارِدًا"] 
+    },
+    { 
+        s: [
+            "عِنْدي صُداع شَديد وَكُحَّة", 
+            "عِنْدي صُداع وَكُحَّة شَديد",
+            "عِنْدي وَكُحَّة شَديد صُداع", 
+            "عِنْدي كُحَّة وَصُداع شَديد"
+        ], 
+        w: ["عِنْدي", "صُداع", "وَ", "شَديد", "كُحَّة"] 
+    },
+    { 
+        s: ["جدي مَريض وَضَغْطُه مُرْتَفِع"], 
+        w: ["جدي", "مَريض", "وَضَغْطُه", "مُرْتَفِع"] 
+    },
+    { 
+        s: ["أُخْتي مَريضَة وَحَرارَتها مُرْتَفِعَة"], 
+        w: ["أُخْتي", "مَريضَة", "وَحَرارَتها", "مُرْتَفِعَة"] 
+    },
+    { 
+        s: ["لا تَأْكُلْ كَثيراً"], 
+        w: ["لا", "تَأْكُلْ", "كَثيراً"] 
+    },
+    { 
+        s: ["عِنْدَها أَلَمٌ في رَأْسِها هِيَ مَريضَة" ,"هِيَ مَريضَة عِنْدَها أَلَمٌ في رَأْسِها"], 
+        w: ["هِيَ", "مَريضَة", "عِنْدَها", "أَلَمٌ", "في", "رَأْسِها"] 
+    },
+    { 
+        s: ["أُنَظِّفَ أَسْناني بِفُرْشاةِ الأَسْنان"], 
+        w: ["أُنَظِّفَ", "أَسْناني", "بِفُرْشاةِ", "الأَسْنان"] 
+    },
+    { 
+        s: [
+            "عِنْدَما أَشْعُرُ بِالأَلَم أَذْهَبُ إِلى المُسْتَشْفى", 
+            "أَذْهَبُ إِلى المُسْتَشْفى عِنْدَما أَشْعُرُ بِالأَلَم"
+        ], 
+        w: ["عِنْدَما", "أَشْعُرُ", "بِالأَلَم", "أَذْهَبُ", "إِلى", "المُسْتَشْفى"] 
+    }, 
+    { 
+        s: ["أَنا أَرى بِعَيْني وَأَسْمَعُ بِأُذُني"], 
+        w: ["أَنا", "أَرى", "بِعَيْني", "وَأَسْمَعُ", "بِأُذُني"] 
+    },
+    { 
+        s: ["أَشُمُّ بِأَنْفي وَأَذوقُ بِلِساني وَأَلْمِسُ بِيَدي"], 
+        w: ["أَشُمُّ", "بِأَنْفي", "وَأَذوقُ", "بِلِساني", "وَأَلْمِسُ", "بِيَدي"] 
+    }
+];
+
+        const activityArea = document.getElementById('activity-area');
+        const instructionText = document.getElementById('instruction-text');
+        const progressDisplay = document.getElementById('progress-display');
+        const progressBar = document.getElementById('progress-bar');
+        const colorPalette = ['#007bff', '#dc3545', '#28a745', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14'];
+
+        let audioCtx = null;
+        let activityQueue = [];
+        let currentActivityIndex = 0;
+        let grandTotalActivities = 0; 
+        let scoreCorrect = 0;
+        let scoreIncorrect = 0;
+        let currentTour = 1; 
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.error(err));
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function initAudioContext() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        function playSound(type) {
+            if (!audioCtx) return; 
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'touch') { 
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(200, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+                oscillator.start(now);
+                oscillator.stop(now + 0.1);
+            } else if (type === 'correct') { 
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, now);
+                oscillator.frequency.linearRampToValueAtTime(880, now + 0.2); 
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                oscillator.start(now);
+                oscillator.stop(now + 0.2);
+            } else if (type === 'incorrect') { 
+                oscillator.type = 'square'; 
+                oscillator.frequency.setValueAtTime(164.81, now); 
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2); 
+                oscillator.start(now);
+                oscillator.stop(now + 0.2); 
+            }
+        }
+        
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createActivityQueue() {
+            const sortedByLength = [...activitiesData].sort((a, b) => a.w.length - b.w.length);
+            const shortSentences = sortedByLength.slice(0, 10);
+            const longSentences = sortedByLength.slice(10, 20);
+
+            if (currentTour === 1) {
+                activityQueue = shuffle([...shortSentences]);
+            } else {
+                if (currentTour > 2) {
+                    currentTour = 1;
+                    activityQueue = shuffle([...shortSentences]);
+                } else {
+                    activityQueue = shuffle([...longSentences]);
+                }
+            }
+            
+            grandTotalActivities = activityQueue.length;
+            if (grandTotalActivities === 0) {
+                 activityQueue = shuffle([...activitiesData]); 
+                 grandTotalActivities = activityQueue.length;
+            }
+        }
+
+        function loadActivity() {
+            activityArea.innerHTML = '';
+            updateProgress();
+            
+            const activityData = activityQueue[currentActivityIndex]; 
+            instructionText.textContent = "رَتِّب الكَلِمات لِتَكْوين جُمْلَة‫.‬";
+            buildScramble(activityData);
+        }
+        
+        function updateButtonState() {
+            const dragZone = document.getElementById('drag-zone');
+            const dropZone = document.getElementById('drop-zone');
+            const checkBtn = document.getElementById('check-scramble-btn');
+            const resetBtn = document.getElementById('reset-scramble-btn');
+
+            if (!dragZone || !dropZone || !checkBtn || !resetBtn) return;
+
+            const isAllMoved = dragZone.children.length === 0;
+            if (isAllMoved) {
+                checkBtn.classList.remove('disabled-btn');
+            } else {
+                checkBtn.classList.add('disabled-btn');
+            }
+
+            const isAnyMoved = dropZone.children.length > 0;
+            if (isAnyMoved) {
+                resetBtn.classList.remove('disabled-btn');
+            } else {
+                resetBtn.classList.add('disabled-btn');
+            }
+        }
+
+        function handleWordClick(e) {
+            const wordItem = e.currentTarget; 
+            if (wordItem.draggable === false) return;
+            const dropZone = document.getElementById('drop-zone');
+            const dragZone = document.getElementById('drag-zone');
+            
+            if (wordItem.parentElement === dragZone) {
+                dropZone.appendChild(wordItem);
+            } else if (wordItem.parentElement === dropZone) {
+                dragZone.appendChild(wordItem);
+            }
+            playSound('touch'); 
+            
+            updateButtonState();
+        }
+
+        function buildScramble(data) {
+            const scrambleContainer = document.createElement('div');
+            scrambleContainer.className = 'scramble-container';
+
+            const dropZone = document.createElement('div');
+            dropZone.id = 'drop-zone';
+            dropZone.className = 'drop-zone';
+
+            const dragZone = document.createElement('div');
+            dragZone.id = 'drag-zone';
+            dragZone.className = 'drag-zone';
+
+            const correctOrderWords = data.s[0].split(' ');
+            let wordObjects = correctOrderWords.map((wordText, index) => {
+                return {
+                    text: wordText,
+                    color: colorPalette[index % colorPalette.length], 
+                    id: `word-obj-${index}` 
+                };
+            });
+
+            const shuffledObjects = shuffle([...wordObjects]);
+
+            shuffledObjects.forEach((obj) => {
+                const wordItem = document.createElement('div');
+                wordItem.className = 'word-item';
+                wordItem.textContent = obj.text;
+                wordItem.id = obj.id; 
+                wordItem.draggable = true;
+                wordItem.style.backgroundColor = obj.color; 
+                wordItem.addEventListener('click', handleWordClick);
+                dragZone.appendChild(wordItem);
+            });
+
+            const controls = document.createElement('div');
+            controls.className = 'scramble-controls';
+            
+            const checkButton = document.createElement('button');
+            checkButton.id = 'check-scramble-btn';
+            checkButton.textContent = '✔ تَحَقَّقْ';
+            checkButton.classList.add('disabled-btn');
+            checkButton.onclick = () => {
+                playSound('touch');
+                checkScrambleAnswer(data.s); 
+            };
+            
+            const resetButton = document.createElement('button');
+            resetButton.id = 'reset-scramble-btn';
+            resetButton.textContent = '🔄 إِعادَة';
+            resetButton.classList.add('disabled-btn'); 
+            resetButton.onclick = () => {
+                playSound('touch');
+                document.getElementById('hint-btn').style.visibility = 'hidden'; 
+                loadActivity(); 
+            };
+
+            const hintButton = document.createElement('button');
+            hintButton.id = 'hint-btn';
+            hintButton.textContent = '💡'; 
+            hintButton.onclick = () => {
+                playSound('touch');
+                solvePuzzleAnimation(data.s[0]); 
+            };
+            
+            const nextButton = document.createElement('button');
+            nextButton.id = 'next-activity-btn';
+            nextButton.style.display = 'none'; 
+            nextButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/></svg>`; 
+            nextButton.onclick = () => {
+                playSound('touch');
+                nextActivity();
+            };
+
+            controls.appendChild(hintButton); 
+            controls.appendChild(checkButton);
+            controls.appendChild(resetButton);
+            controls.appendChild(nextButton); 
+            
+            scrambleContainer.appendChild(dropZone);
+            scrambleContainer.appendChild(dragZone);
+            scrambleContainer.appendChild(controls);
+            
+            activityArea.appendChild(scrambleContainer);
+
+            addDragDropListeners();
+        }
+        
+        function toggleWordDrag(enable) {
+            document.querySelectorAll('.word-item').forEach(item => {
+                item.draggable = enable;
+                item.style.cursor = enable ? 'grab' : 'default'; 
+                if (!enable) item.classList.remove('dragging'); 
+            });
+        }
+
+        function checkScrambleAnswer(correctAnswers) {
+            const dropZone = document.getElementById('drop-zone');
+            const words = Array.from(dropZone.children).map(item => item.textContent);
+            const userAnswer = words.join(' ');
+            
+            const cleanUserAnswer = userAnswer.replace(/\.$/, '');
+            const cleanCorrectAnswers = correctAnswers.map(s => s.replace(/\.$/, ''));
+            const isCorrect = cleanCorrectAnswers.includes(cleanUserAnswer);
+            
+            dropZone.classList.remove('drop-zone-correct', 'drop-zone-incorrect');
+            
+            if (isCorrect) {
+                scoreCorrect++;
+                playSound('correct'); 
+                dropZone.classList.add('drop-zone-correct'); 
+                
+                document.getElementById('check-scramble-btn').style.display = 'none';
+                document.getElementById('reset-scramble-btn').style.display = 'none';
+                
+                const hintBtn = document.getElementById('hint-btn');
+                if(hintBtn) hintBtn.style.visibility = 'hidden';
+
+                document.getElementById('next-activity-btn').style.display = 'flex';
+                
+                toggleWordDrag(false); 
+                
+            } else {
+                scoreIncorrect++;
+                playSound('incorrect'); 
+                dropZone.classList.add('drop-zone-incorrect');
+                
+                const hintBtn = document.getElementById('hint-btn');
+                if (hintBtn) hintBtn.style.visibility = 'visible';
+                
+                setTimeout(() => {
+                    dropZone.classList.remove('drop-zone-incorrect');
+                }, 400);
+            }
+        }
+
+        function solvePuzzleAnimation(correctSentenceStr) {
+            const dropZone = document.getElementById('drop-zone');
+            const allCards = Array.from(document.querySelectorAll('.word-item'));
+            const hintBtn = document.getElementById('hint-btn');
+
+            document.body.style.pointerEvents = 'none';
+            hintBtn.style.visibility = 'hidden'; 
+
+            const positions = new Map();
+            allCards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                positions.set(card.id, { left: rect.left, top: rect.top });
+            });
+
+            correctSentenceStr.split(' ').forEach((_, i) => {
+                const card = document.getElementById(`word-obj-${i}`);
+                dropZone.appendChild(card); 
+            });
+
+            allCards.forEach(card => {
+                const oldPos = positions.get(card.id);
+                const newRect = card.getBoundingClientRect(); 
+
+                const deltaX = oldPos.left - newRect.left;
+                const deltaY = oldPos.top - newRect.top;
+
+                card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                card.style.transition = 'none'; 
+            });
+
+            requestAnimationFrame(() => {
+                allCards.forEach(card => {
+                    card.style.transition = 'transform 2.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                    card.style.transform = 'translate(0, 0)';
+                    card.style.zIndex = '100'; 
+                });
+            });
+
+            setTimeout(() => {
+                allCards.forEach(card => {
+                    card.style.transition = '';
+                    card.style.transform = '';
+                    card.style.zIndex = '';
+                });
+                
+                document.body.style.pointerEvents = 'auto';
+                checkScrambleAnswer([correctSentenceStr]);
+            }, 2500); 
+        }
+
+        function nextActivity() {
+            currentActivityIndex++; 
+            if (currentActivityIndex === grandTotalActivities) {
+                showFinishScreen();
+            } else {
+                loadActivity();
+            }
+        }
+
+        function showFinishScreen() {
+            activityArea.innerHTML = `
+                <div id="finish-screen">
+                    <p>أَحْسَنْت! لَقَد أَكْمَلْتَ جَميع الأَنْشِطَة‫.‬</p>
+                    <div class="score-display">
+                        <span class="score-item score-correct">✔ ${scoreCorrect}</span>
+                        <span class="score-item score-incorrect">❌ ${scoreIncorrect}</span>
+                    </div>
+                    <button id="replay-button" onclick="restartGame()">🔄</button>
+                </div>
+            `;
+            instructionText.textContent = "اِنْتَهَت الأَنْشِطَة";
+            progressDisplay.textContent = "اِكْتَمَل";
+            progressBar.style.width = '100%';
+            progressBar.style.backgroundColor = 'var(--success-color)';
+        }
+        
+        function restartGame() {
+            playSound('touch');
+            scoreCorrect = 0;
+            scoreIncorrect = 0;
+            currentActivityIndex = 0; 
+            currentTour++; 
+            
+            progressBar.style.width = '0%';
+            progressBar.style.backgroundColor = 'var(--accent-color)';
+            
+            createActivityQueue(); 
+            loadActivity(); 
+        }
+
+        function updateProgress() {
+            if (grandTotalActivities === 0) { progressDisplay.textContent = `0 / 10`; return; }
+            if (currentActivityIndex === grandTotalActivities) return; 
+            const currentQuestionNum = currentActivityIndex + 1;
+            const progressPercent = (currentActivityIndex / grandTotalActivities) * 100;
+            progressDisplay.textContent = `${currentQuestionNum} / ${grandTotalActivities}`;
+            progressBar.style.width = `${progressPercent}%`;
+        }
+        
+        function addDragDropListeners() {
+            const draggables = document.querySelectorAll('.word-item');
+            const containers = [document.getElementById('drop-zone'), document.getElementById('drag-zone')];
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    if (!e.currentTarget.draggable) { e.preventDefault(); return; }
+                    e.currentTarget.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', e.currentTarget.id);
+                });
+                draggable.addEventListener('dragend', (e) => { e.currentTarget.classList.remove('dragging'); });
+            });
+
+            containers.forEach(container => {
+                container.addEventListener('dragover', (e) => { e.preventDefault(); });
+                
+                container.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const id = e.dataTransfer.getData('text/plain');
+                    const draggable = document.getElementById(id);
+                    if (draggable && draggable.draggable) { 
+                        container.appendChild(draggable);
+                        draggable.classList.remove('dragging');
+                        
+                        updateButtonState();
+                    }
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            activitiesData.forEach(round => {
+                round.w = round.w.map(word => word.trim().replace(/\.$/, ''));
+                round.s = round.s.map(s_item => s_item.trim().replace(/\.$/, ''));
+            });
+            
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullScreen);
+            document.addEventListener('fullscreenchange', () => {
+                if (document.fullscreenElement) document.body.classList.add('fullscreen');
+                else document.body.classList.remove('fullscreen');
+            });
+            
+            createActivityQueue(); 
+            loadActivity();
+        });
+    </script> 
+    <script src="https://cdn.jsdelivr.net/npm/drag-drop-touch@1.3.1/DragDropTouch.js"></script>
+</body>
+</html>
