@@ -387,40 +387,141 @@
         ];
 
        const activitiesData = [
-    // --- EVİN BÖLÜMLERİ (Tek ve Net Cevaplar) ---
-    { pre: "أُمّي تَطْبُخُ الطَّعام في", post: "", a: "المَطْبَخ", hint: "Evin Bölümü (Mutfak)" },
-    { pre: "أَغْسِلُ وَجْهي وَيَدَيَّ في", post: "", a: "الحَمّام", hint: "Evin Bölümü (Banyo)" },
-    { pre: "أَنامُ لَيْلًا في غُرْفَة", post: "", a: "النَّوْم", hint: "Oda (Yatak Odası)" },
-    { pre: "نَجْلِسُ مَعَ الضُّيوف في غُرْفَة", post: "", a: "الجُلوس", hint: "Oda (Oturma Odası)" },
-    { pre: "يوجَدُ حَوْلَ البَيْت", post: "واسِعَة", a: "حَديقَة", hint: "İsim (Bahçe)" },
-    { pre: "نُشاهِدُ", post: "في غُرْفَة الجُلوس", a: "التِّلْفاز", hint: "Eşya (Televizyon)" },
-
-    // --- AİLE VE KİŞİLER (1 veya 2 Cevaplı) ---
-    { pre: "هَذا أَبي وَ هَذِهِ", post: "", a: ["أُمّي", "والِدَتي"], hint: "Aile Üyesi (Annem)" },
-    { pre: "أَنا", post: "أُسْرَتي كَثيرًا", a: "أُحِبُّ", hint: "Fiil (Seviyorum)" },
-    { pre: "أُخْتي", post: "تَلْعَبُ بِالدُّمْيَة", a: "الصَّغيرَة", hint: "Sıfat (Küçük - Müennes)" },
-    { pre: "تَتَكَوَّنُ", post: "مِنْ خَمْسَةِ أَفْراد", a: ["أُسْرَتي", "عائِلَتي", "الأُسْرَة", "العائِلَة"], hint: "İsim (Ailem)" },
-
-    // --- YER, YÖN VE ADRES (Net Cevaplar) ---
-    { pre: "", post: "تَسْكُنُ يا أحْمَد؟", a: "أَيْنَ", hint: "Soru Edatı (Nerede)" },
+   
+    // --- 1YER, YÖN VE ADRES (Net Cevaplar) ---
+    
     { pre: "بَيْتي", post: "مِنَ المَدْرَسَة", a: "قَريب", hint: "Sıfat (Yakın)" },
     { pre: "المَدْرَسَة", post: "عَنِ البَيْت", a: "بَعيدَة", hint: "Sıfat (Uzak)" },
-    { pre: "بَيْتي في", post: "الأَوَّل", a: "الطّابِق", hint: "İsim (Kat)" },
-    // DÜZELTİLEN SATIR (Syntax hatası giderildi, gramer düzeltildi):
-    { pre: "", post: "عُنوانُ بَيْتِك؟", a: "ما", hint: "Soru Edatı (Ne)" },
-    // EKLENEN ANKARA SORUSU (Formatı düzenlendi):
-    { pre: "أَنْقَرَة مَدينَة مُهِمَّة، لِأَنَّها", post: "تُرْكِيا.", a: "عاصِمَة", hint: "Yönetim merkezi / Başkent" },
+    
+    // 2 EKLENEN ANKARA SORUSU (Formatı düzenlendi):
+    { pre: "أَنْقَرَة مَدينَة مُهِمَّة، لِأَنَّها", post: "تُرْكِيا", a: "عاصِمَة", hint: "Yönetim merkezi / Başkent" },
 
-    // --- GÜNLÜK İŞLER VE SIFATLAR ---
-    { pre: "أَنا", post: "مُبَكِّرًا جِدًّا", a: "أَسْتَيْقِظُ", hint: "Fiil (Uyanıyorum)" },
-    { pre: "أَتَناوَلُ", post: "فِي الصَّباح", a: "الفُطور", hint: "Öğün (Kahvaltı)" },
-    { pre: "أَذْهَبُ إِلى", post: "بِالحافِلَة", a: "المَدْرَسَة", hint: "Yer (Okul)" },
+    // 3. Cümle: Konya Mevlana Müzesi ile meşhurdur.
     { 
-  pre: "أُريدُ", 
-  post: "لِلقِطار السَّريع", 
-  a: "تَذْكِرَة", 
-  hint: "İsim (Bilet)" 
-}
+        pre: "تَشْتَهِرُ قونْيا بِـ", 
+        post: "مَوْلانا", 
+        a: "مُتْحَف", 
+        hint: "Gezilecek yer (Müze)" 
+    },
+    // 4. Cümle: Ankara Türkiye'nin ortasındadır.
+    { 
+        pre: "تَقَعُ أَنْقَرَة في", 
+        post: "تُرْكِيا", 
+        a: "وَسَط", 
+        hint: "Yön/Konum (Orta)" 
+    },
+    // 5. Cümle: Urfa'da Balıklı Göl'de gezdim.
+    { 
+        pre: "تَجَوَّلْتُ في", 
+        post: "الأَسْماك في أورْفَة", 
+        a: "بُحَيْرَة", 
+        hint: "Coğrafi yer (Göl)" 
+    },
+    // 6. Cümle: İstanbul'da Ayasofya Camii'ni ziyaret ettim.
+    { 
+        pre: "زُرْتُ", 
+        post: "آياصوفْيا الكَبير في إِسْطَنْبول", 
+        a: "مَسْجِد", 
+        hint: "İbadet yeri (Cami)" 
+    },
+    // 7. Cümle: Trabzon Türkiye'nin kuzeyindedir.
+    { 
+        pre: "تَقَعُ طِرابْزون في", 
+        post: "تُرْكِيا", 
+        a: "شَمال", 
+        hint: "Yön (Kuzey)" 
+    },
+    // 8. Cümle: Mersin Türkiye'nin güneyindedir.
+    { 
+        pre: "تَقَعُ مَرْسين في", 
+        post: "تُرْكِيا", 
+        a: "جَنوب", 
+        hint: "Yön (Güney)" 
+    },
+    
+    // 9. Cümle: Türkiye Asya ve Avrupa arasındadır. [Kaynak: Ünite 3, Ders 1]
+    { 
+        pre: "تَقَعُ تُرْكِيا", 
+        post: "آسْيا وَأُوروبّا", 
+        a: "بَيْن", 
+        hint: "Mekan Zarfı (Arasında)" 
+    },
+    
+    // 10. Cümle: Yolculuk kaç saat sürer?
+    { 
+        pre: "كَم", 
+        post: "تَسْتَغْرِقُ الرِّحْلَة؟", 
+        a: "ساعَة", 
+        hint: "Zaman birimi (Saat)" 
+    },
+    
+    // 11. Cümle: Kırmızı ışıkta dururum.
+    { 
+        pre: "أَقِفُ عِنْد الضَّوْء", 
+        post: "", 
+        a: "الأَحْمَر", 
+        hint: "Renk (Kırmızı)" 
+    },
+    // 12. Cümle: Yeşil ışıkta geçerim.
+    { 
+        pre: "أَعْبُرُ عِنْد الضَّوْء", 
+        post: "", 
+        a: "الأَخْضَر", 
+        hint: "Renk (Yeşil)" 
+    },
+    
+    // 13. Cümle: Otelde uygun bir oda istiyorum.
+    { 
+        pre: "أُريدُ", 
+        post: "مُناسِبَة في الفُنْدُق", 
+        a: "غُرْفَة", 
+        hint: "Yer (Oda)" 
+    },
+// 14. Cümle: Erzurum Türkiye'nin doğusundadır. [Kaynak: Ünite 3, Ders 1]
+    { 
+        pre: "تَقَعُ أَرْضُروم في", 
+        post: "تُرْكِيا", 
+        a: "شَرْق", 
+        hint: "Yön (Doğu)" 
+    },
+// 15. Cümle: Ve aleykümü's-selam ey Yunus. [Kaynak: Ünite 3, Ders 1]
+    { 
+        pre: "وَعَلَيْكُم", 
+        post: "يا يونُس", 
+        a: "السَّلام", 
+        hint: "Selamlaşma (Barış)" 
+    },
+
+    // 16. Cümle: Hızlı tren istasyona ulaştı (vardı). [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "", 
+        post: "القِطار السَّرِيع إِلى المَحَطَّة", 
+        a: "وَصَلَ", 
+        hint: "Fiil (Ulaştı/Vardı)" 
+    },
+
+    // 17. Cümle: Furkan ne zaman ülkesine dönecek? [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "", 
+        post: "سَيَرْجِعُ فُرْقان إِلى بَلَدِه؟", 
+        a: "مَتى", 
+        hint: "Soru Edatı (Ne zaman)" 
+    },
+
+    // 19. Cümle: Sarı ışıkta hazırlanırım (beklerim). [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "أَسْتَعِدُّ عِنْد الضَّوْء", 
+        post: "", 
+        a: "الأَصْفَر", 
+        hint: "Renk (Sarı)" 
+    },
+// 20. Cümle: Okulum evimden uzaktır. [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "مَدْرَسَتي بَعيدَة", 
+        post: "بَيْتي", 
+        a: "عَن", 
+        hint: "Harf-i Cer (-den/-dan)" 
+    }
 ];
 
         const activityArea = document.getElementById('activity-area');
@@ -524,25 +625,40 @@
         }
 
         function calculateGlobalFontSize() {
+            // Eğer veri yoksa dur
             if (!longestDataItem) return;
 
             const wrapper = document.querySelector('.question-wrapper');
             if (!wrapper) return;
 
+            // Gizli ölçüm cetvelini bul veya oluştur
             let ruler = document.getElementById('hidden-ruler');
             if (!ruler) {
                 ruler = document.createElement('div');
                 ruler.id = 'hidden-ruler';
+                // CSS özellikleri: Tek satır ve görünmez
+                ruler.style.visibility = 'hidden';
+                ruler.style.position = 'absolute';
+                ruler.style.whiteSpace = 'nowrap'; // ASLA alt satıra geçme
+                ruler.style.top = '0';
+                ruler.style.left = '0';
                 wrapper.appendChild(ruler);
             }
             ruler.innerHTML = ''; 
 
+            // 1. Cümlenin başı
             const preSpan = document.createElement('span'); 
             preSpan.textContent = longestDataItem.pre;
             
+            // 2. Cevap Kutusu (Temsili genişlik için içine X koyuyoruz)
             const inputDiv = document.createElement('div'); 
             inputDiv.className = 'answer-input'; 
+            // Cevabın uzunluğunu simüle etmek için cevap kadar 'X' veya en az 3 karakter koy
+            let dummyText = longestDataItem.a ? longestDataItem.a.replace(/./g, 'X') : 'XXX';
+            if(dummyText.length < 3) dummyText = 'XXX';
+            inputDiv.textContent = dummyText; 
             
+            // 3. Cümlenin sonu
             const postSpan = document.createElement('span');
             postSpan.textContent = longestDataItem.post;
 
@@ -550,16 +666,25 @@
             ruler.appendChild(inputDiv);
             ruler.appendChild(postSpan);
 
-            let fontSize = wrapper.clientHeight * 0.7; 
-            const maxWidth = wrapper.clientWidth * 0.98; 
+            // --- HESAPLAMA KISMI ---
+
+            // Başlangıçta fontu kutu yüksekliğinin %60'ı kadar yap (Büyük başla)
+            let fontSize = wrapper.clientHeight * 0.60; 
+            
+            // Güvenli genişlik (Ekranın kenarlarına yapışmaması için %90'ı)
+            const maxWidth = wrapper.clientWidth * 0.90; 
 
             ruler.style.fontSize = fontSize + 'px';
 
-            while ((ruler.scrollWidth > maxWidth) && fontSize > 10) {
-                fontSize = fontSize * 0.95; 
+            // Döngü: Metin genişliği (scrollWidth) kutu genişliğini (maxWidth) aştığı sürece
+            // VEYA font çok büyükse fontu küçült.
+            // En küçük font limiti 12px olarak ayarlandı.
+            while ( (ruler.scrollWidth > maxWidth || ruler.scrollHeight > wrapper.clientHeight) && fontSize > 12 ) {
+                fontSize -= 1; // Her seferinde 1 piksel küçült
                 ruler.style.fontSize = fontSize + 'px';
             }
 
+            // Hesaplanan değeri global değişkene ata
             document.documentElement.style.setProperty('--global-question-font-size', fontSize + 'px');
         }
 
