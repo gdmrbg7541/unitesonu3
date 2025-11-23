@@ -388,32 +388,39 @@
 
        const activitiesData = [
     // --- EVİN BÖLÜMLERİ (Tek ve Net Cevaplar) ---
-    { pre: "أُمّي تَطْبُخُ الطَّعام في", post: "", a: "الْمَطْبَخ", hint: "Evin Bölümü (Mutfak)" },
-    { pre: "أَغْسِلُ وَجْهي وَيَدَيَّ في", post: "", a: "الْحَمّام", hint: "Evin Bölümü (Banyo)" },
+    { pre: "أُمّي تَطْبُخُ الطَّعام في", post: "", a: "المَطْبَخ", hint: "Evin Bölümü (Mutfak)" },
+    { pre: "أَغْسِلُ وَجْهي وَيَدَيَّ في", post: "", a: "الحَمّام", hint: "Evin Bölümü (Banyo)" },
     { pre: "أَنامُ لَيْلًا في غُرْفَة", post: "", a: "النَّوْم", hint: "Oda (Yatak Odası)" },
-    { pre: "نَجْلِسُ مَعَ الضُّيوف في غُرْفَة", post: "", a: "الْجُلوس", hint: "Oda (Oturma Odası)" },
-    { pre: "يوجَدُ حَوْلَ الْبَيْت", post: "واسِعَة", a: "حَديقَة", hint: "İsim (Bahçe)" },
-    { pre: "نُشاهِدُ", post: "في غُرْفَة الْجُلوس", a: "التِّلْفاز", hint: "Eşya (Televizyon)" },
+    { pre: "نَجْلِسُ مَعَ الضُّيوف في غُرْفَة", post: "", a: "الجُلوس", hint: "Oda (Oturma Odası)" },
+    { pre: "يوجَدُ حَوْلَ البَيْت", post: "واسِعَة", a: "حَديقَة", hint: "İsim (Bahçe)" },
+    { pre: "نُشاهِدُ", post: "في غُرْفَة الجُلوس", a: "التِّلْفاز", hint: "Eşya (Televizyon)" },
 
     // --- AİLE VE KİŞİLER (1 veya 2 Cevaplı) ---
-    { pre: "هَذا أَبي وَ هَذِهِ", post: "", a: ["أُمّي", "والِدَتي"], hint: "Aile Üyesi (Annem)" }, 
+    { pre: "هَذا أَبي وَ هَذِهِ", post: "", a: ["أُمّي", "والِدَتي"], hint: "Aile Üyesi (Annem)" },
     { pre: "أَنا", post: "أُسْرَتي كَثيرًا", a: "أُحِبُّ", hint: "Fiil (Seviyorum)" },
     { pre: "أُخْتي", post: "تَلْعَبُ بِالدُّمْيَة", a: "الصَّغيرَة", hint: "Sıfat (Küçük - Müennes)" },
-    { pre: "تَتَكَوَّنُ", post: "مِنْ خَمْسَةِ أَفْراد", a: ["أُسْرَتي", "عائِلَتي"], hint: "İsim (Ailem)" },
+    { pre: "تَتَكَوَّنُ", post: "مِنْ خَمْسَةِ أَفْراد", a: ["أُسْرَتي", "عائِلَتي", "الأُسْرَة", "العائِلَة"], hint: "İsim (Ailem)" },
 
     // --- YER, YÖN VE ADRES (Net Cevaplar) ---
     { pre: "", post: "تَسْكُنُ يا أحْمَد؟", a: "أَيْنَ", hint: "Soru Edatı (Nerede)" },
-    { pre: "بَيْتي", post: "مِنَ الْمَدْرَسَة", a: "قَريب", hint: "Sıfat (Yakın)" },
-    { pre: "الْمَدْرَسَة", post: "عَنِ الْبَيْت", a: "بَعيدَة", hint: "Sıfat (Uzak)" },
-    { pre: "بَيْتي في", post: "الْأَوَّل", a: "الطّابِق", hint: "İsim (Kat)" },
-    { pre: "", post: "عُنوانُ بَيْتِك؟", a: ["ما", "ماذا"], hint: "Soru Edatı (Ne)" },
-    { pre: "بَيْتي في شارِع", post: "", a: ["الْوَطَن", "السَّلام"], hint: "Özel İsim (Cadde adı örn: Vatan/Barış)" }, // Burada ipucuna göre öğrenci herhangi birini yazsa kabul olur.
-    
+    { pre: "بَيْتي", post: "مِنَ المَدْرَسَة", a: "قَريب", hint: "Sıfat (Yakın)" },
+    { pre: "المَدْرَسَة", post: "عَنِ البَيْت", a: "بَعيدَة", hint: "Sıfat (Uzak)" },
+    { pre: "بَيْتي في", post: "الأَوَّل", a: "الطّابِق", hint: "İsim (Kat)" },
+    // DÜZELTİLEN SATIR (Syntax hatası giderildi, gramer düzeltildi):
+    { pre: "", post: "عُنوانُ بَيْتِك؟", a: "ما", hint: "Soru Edatı (Ne)" },
+    // EKLENEN ANKARA SORUSU (Formatı düzenlendi):
+    { pre: "أَنْقَرَة مَدينَة مُهِمَّة، لِأَنَّها", post: "تُرْكِيا.", a: "عاصِمَة", hint: "Yönetim merkezi / Başkent" },
+
     // --- GÜNLÜK İŞLER VE SIFATLAR ---
     { pre: "أَنا", post: "مُبَكِّرًا جِدًّا", a: "أَسْتَيْقِظُ", hint: "Fiil (Uyanıyorum)" },
-    { pre: "أَتَناوَلُ", post: "فِي الصَّباح", a: "الْفُطور", hint: "Öğün (Kahvaltı)" },
-    { pre: "أَذْهَبُ إِلى", post: "بِالْحافِلَة", a: "الْمَدْرَسَة", hint: "Yer (Okul)" },
-    { pre: "الْبَيْتُ", post: "وَ جَميلٌ", a: ["كَبير", "واسِع"], hint: "Sıfat (Büyük/Geniş)" }
+    { pre: "أَتَناوَلُ", post: "فِي الصَّباح", a: "الفُطور", hint: "Öğün (Kahvaltı)" },
+    { pre: "أَذْهَبُ إِلى", post: "بِالحافِلَة", a: "المَدْرَسَة", hint: "Yer (Okul)" },
+    { 
+  pre: "أُريدُ", 
+  post: "لِلقِطار السَّريع", 
+  a: "تَذْكِرَة", 
+  hint: "İsim (Bilet)" 
+}
 ];
 
         const activityArea = document.getElementById('activity-area');
@@ -701,7 +708,7 @@
                 feedbackIcon.className = 'incorrect';
                 playSound('incorrect');
                 const answerToShow = (Array.isArray(correctAnswer) ? correctAnswer[0] : correctAnswer);
-                feedbackCorrectAnswer.textContent = `الْجَواب الصَّحيح: ${answerToShow}`;
+                feedbackCorrectAnswer.textContent = `الجَواب الصَّحيح: ${answerToShow}`;
                 feedbackDetails.style.display = 'flex'; 
                 feedbackOkButton.onclick = () => { nextActivity(); };
             }
