@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قيمي - تمرين الاختبار (Responsive)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Temel Sayfa Stilleri --- */
+        :root {
+            --accent-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --bg-light: #f8f9fa;
+            --font-arabic: 'Markazi Text', 'Tahoma', 'Arial', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-arabic);
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Sayfa kaymasını engelle */
+        }
+
+        /* --- Ana Etkinlik Alanı (Responsive Kutu) --- */
+        .activity-container {
+            position: relative;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            
+            /* Varsayılan Genişlik/Yükseklik (Masaüstü) */
+            width: 90vw;
+            height: 85vh; 
+            max-width: 1200px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- Header (Başlık ve İlerleme) --- */
+        .header {
+            padding: 10px 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: grid;
+            grid-template-areas: "progress instruction back";
+            grid-template-columns: 1fr 2fr 1fr; /* İlerleme - Başlık - Butonlar */
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        
+        #instruction-text { 
+            grid-area: instruction;
+            text-align: center; 
+            font-size: clamp(1.5rem, 2.5vw, 2.2rem); 
+            font-weight: 700;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .progress-container { 
+            grid-area: progress;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            direction: ltr; /* İlerleme çubuğu soldan sağa */
+        }
+        #progress-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            min-width: 50px;
+        }
+        .progress-bar-container {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.4s ease;
+        }
+
+        /* --- Butonlar (Geri ve Tam Ekran) --- */
+        .back-button-container {
+            grid-area: back;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .back-button, #fullscreen-btn {
+            background: #f0f0f0;
+            color: #555;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .back-button:hover, #fullscreen-btn:hover { background: #e0e0e0; }
+        .back-button svg, #fullscreen-btn svg { width: 24px; height: 24px; fill: currentColor; }
+        
+        /* Tam ekran ikon değişimi */
+        #fullscreen-btn .icon-open { display: block; }
+        #fullscreen-btn .icon-close { display: none; }
+        body.fullscreen #fullscreen-btn .icon-open { display: none; }
+        body.fullscreen #fullscreen-btn .icon-close { display: block; }
+
+        /* --- Soru ve Şıklar Alanı --- */
+        .activity-area {
+            flex-grow: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .question {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #212529;
+            line-height: 1.3;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option {
+            width: 100%;
+            max-width: 600px; /* Çok geniş ekranlarda yayılmasın */
+            padding: 12px 10px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-family: var(--font-arabic);
+            background-color: var(--bg-light);
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .option:hover {
+            border-color: var(--accent-color);
+            background-color: #eef5ff;
+        }
+
+        /* --- Geri Bildirim Overlay --- */
+        .feedback-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8rem;
+            z-index: 200;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
+        }
+        .feedback-overlay.show { visibility: visible; opacity: 1; }
+        .feedback-overlay .correct { color: var(--success-color); }
+        .feedback-overlay .incorrect { color: var(--danger-color); }
+        
+        /* --- Bitiş Ekranı --- */
+        #finish-screen {
+            text-align: center;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        #finish-screen p { font-size: clamp(2rem, 5vw, 3.5rem); margin: 10px 0; }
+        .score-display { display: flex; gap: 30px; font-size: 3rem; margin: 20px 0; direction: ltr; }
+        .score-correct { color: var(--success-color); }
+        .score-incorrect { color: var(--danger-color); }
+        #replay-button {
+            font-size: 4rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+        #replay-button:hover { transform: rotate(-90deg); background-color: #f0f0f0; }
+
+        /* =========================================
+           MEDYA SORGULARI (RESPONSIVE AYARLAR)
+           ========================================= */
+
+        /* 1. MOBİL YATAY (LANDSCAPE) - Yükseklik az ise 2 sütun yap */
+        @media (max-height: 600px) {
+            .header { padding: 5px 15px; }
+            .activity-container { width: 95vw; height: 90vh; }
+            .question { margin-bottom: 10px; font-size: 2rem; }
+            
+            .options {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* İKİ SÜTUN */
+                gap: 8px;
+                width: 100%;
+            }
+            .option {
+                font-size: 1.6rem;
+                padding: 8px;
+                max-width: none;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            /* 5 şık varsa sonuncuyu ortala */
+            .options .option:last-child:nth-child(odd) { grid-column: span 2; }
+        }
+
+        /* 2. MOBİL DİKEY (PORTRAIT) - Dar ekranlar */
+        @media (orientation: portrait) and (max-width: 768px) {
+            .activity-container {
+                width: 95vw;
+                height: 90vh;
+                max-height: none;
+            }
+
+            .header {
+                grid-template-areas: 
+                    "progress back"
+                    "instruction instruction";
+                grid-template-columns: 1fr auto;
+                gap: 5px;
+                padding: 5px 10px; /* Header küçüldü */
+            }
+            
+            #instruction-text {
+                font-size: 1.5rem;
+                padding-top: 2px;
+            }
+
+            .question {
+                font-size: 2.2rem;
+                margin-top: 5px;
+                margin-bottom: 10px; /* Soru altı boşluk azaldı */
+            }
+
+            .options {
+                gap: 6px; /* İSTEDİĞİNİZ: Şıklar arası boşluk azaltıldı */
+                width: 100%;
+            }
+
+            .option {
+                font-size: 1.8rem; /* Okunabilir boyut */
+                padding: 8px 5px;  /* İSTEDİĞİNİZ: Kutu içi boşluk azaltıldı */
+                width: 100%;
+                min-height: auto;
+                line-height: 1.2;
+            }
+        }
+
+        /* --- TAM EKRAN MODU (ÖZEL) --- */
+        body.fullscreen .activity-container {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 0;
+        }
+        
+        body.fullscreen.portrait .header {
+            padding-top: 20px; /* Çentik payı */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="activity-container">
+        <div class="header">
+            <div class="progress-container">
+                <div id="progress-display">0 / 0</div> 
+                <div class="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            <div id="instruction-text">...</div>
+            
+            <div class="back-button-container">
+                <button id="fullscreen-btn">
+                    <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M5 10h2V7h3V5H5v5zM14 5v2h3v3h2V5h-5zM5 19v-5h2v3h3v2H5zM14 19v-2h3v-3h2v5h-5z"/>
+                    </svg>
+                    <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+                    </svg>
+                </button>
+                
+                <a href="index.html" class="back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </a>
+            </div>
+        </div> 
+        
+        <div class="activity-area" id="activity-area"></div>
+
+        <div id="feedback-overlay" class="feedback-overlay">
+            <div id="feedback-icon"></div>
+        </div>
+    </div>
+
+   <script>
+        // --- ETKİNLİK VERİLERİ ---
+       const activitiesData = [
+    {
+        title: "Unit 3",
+        quiz: [
+            { q: "يونُس: أَعيشُ في ............... قونْيا.", o: ["بَحْر", "مَدينَة", "جَبَل", "قَلَم", "حَديقَة"], a: 1 },
+            { q: "تَشْتَهِرُ قونْيا بِـ............... مَوْلانا.", o: ["مُتْحَف", "مَطْعَم", "مُسْتَشْفى", "مَطار", "مَدْرَسَة"], a: 0 },
+            { q: "تَقَعُ أَنْقَرَة في ............... تُرْكِيا.", o: ["تَحْت", "فَوْق", "وَسَط", "خَلْف", "أَمام"], a: 2 },
+            { q: "تَجَوَّلْتُ في ............... الأَسْماك في أورْفَة.", o: ["قَلْعَة", "بُحَيْرَة", "جَبَل", "بَيْت", "سُوق"], a: 1 },
+            { q: "زُرْتُ ............... آياصوفْيا الكَبير في إِسْطَنْبول.", o: ["مَدْرَسَة", "سُوق", "مَسْجِد", "فُنْدُق", "قَصْر"], a: 2 },
+            { q: "تَقَعُ طِرابْزون في ............... تُرْكِيا.", o: ["شَمال", "جَنوب", "غَرْب", "وَسَط", "شَرْق"], a: 0 },
+            { q: "تَقَعُ مَرْسين في ............... تُرْكِيا.", o: ["شَرْق", "شَمال", "جَنوب", "وَسَط", "غَرْب"], a: 2 },
+            { q: "لَا شَيْء ............... مِنَ الْوَطَن.", o: ["رَخيص", "أَغْلى", "صَغير", "قَبيح", "قَريب"], a: 1 },
+            { q: "تَقَعُ تُرْكِيا بَيْنَ آسْيا وَ ............... .", o: ["إِفْريقْيا", "أَمْريكا", "أُوروبّا", "أَنْتارْكْتيكا", "أُسْتُرالْيا"], a: 2 },
+            { q: "أَخْدِمُ وَطَني بِـ ............... وَعَمَلي.", o: ["أَكْلي", "نَوْمي", "لَعِبي", "عِلْمي", "شُرْبي"], a: 3 },
+            { q: "أُريدُ ............... لِلقِطار السَّريع.", o: ["كِتاب", "دَفْتَر", "تَذْكِرَة", "طَعام", "قَلَم"], a: 2 },
+            { q: "كَم ............... تَسْتَغْرِقُ الرِّحْلَة؟", o: ["كِيلو", "لِيرَة", "ساعَة", "قَلَم", "مِتْر"], a: 2 },
+            { q: "سَأُسافِرُ إِلى إِسْطَنْبول بِـ ............... .", o: ["الطّائِرَة", "المَدْرَسَة", "البَيْت", "المَلْعَب", "الحَديقَة"], a: 0 },
+            { q: "الشّارِع ............... بِالمُواصَلات.", o: ["سَعيد", "مُزْدَحِم", "جائع", "نائِم", "خالٍ"], a: 1 },
+            { q: "وَصَلَ القِطار السَّريع إِلى ............... .", o: ["المَحَطَّة", "الغُرْفَة", "المَطْبَخ", "الحَديقَة", "السّوق"], a: 0 },
+            { q: "اِمْشِ قَليلًا، وَاتَّجِهْ إِلى ............... .", o: ["اليَمين", "الأَمْس", "السَّماء", "اللَّيْل", "البَيْت"], a: 0 },
+            { q: "أَقِفُ عِنْد الضَّوْء ............... .", o: ["الأَخْضَر", "الأَحْمَر", "الأَزْرَق", "الأَبْيَض", "الأَصْفَر"], a: 1 },
+            { q: "أَعْبُرُ عِنْد الضَّوْء ............... .", o: ["الأَخْضَر", "الأَحْمَر", "الأَسْوَد", "البُنِّيّ", "الأَزْرَق"], a: 0 },
+            { q: "هَذا القِطار ............... مِن السَّيّارَة.", o: ["بَطيء", "قَصير", "صَغير", "أَسْرَع", "أَكْبَر"], a: 3 },
+            { q: "أُريدُ ............... مُناسِبَة في الفُنْدُق.", o: ["غُرْفَة", "شارِع", "طائِرَة", "سَفِينَة", "سَيّارَة"], a: 0 }
+        ]
+    }
+];
+        // --- Gerekli Elementler ---
+        const activityArea = document.getElementById('activity-area');
+        const instructionText = document.getElementById('instruction-text');
+        const progressDisplay = document.getElementById('progress-display');
+        const progressBar = document.getElementById('progress-bar');
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        
+        // --- Ses Değişkenleri ---
+        let audioCtx = null;
+        
+        // --- Durum Değişkenleri ---
+        let activityQueue = [];
+        let currentActivityIndex = 0;
+        let grandTotalActivities = 0;
+        
+        let scoreCorrect = 0;
+        let scoreIncorrect = 0;
+        let allRounds = []; 
+        let currentRoundIndex = 0; 
+
+        // --- SES FONKSİYONLARI ---
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playSound(type) {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'sine';
+            const now = audioCtx.currentTime;
+            if (type === 'touch') {
+                oscillator.frequency.setValueAtTime(200, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+                oscillator.start(now);
+                oscillator.stop(now + 0.1);
+            } else if (type === 'correct') {
+                oscillator.frequency.setValueAtTime(440, now);
+                oscillator.frequency.linearRampToValueAtTime(880, now + 0.2);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                oscillator.start(now);
+                oscillator.stop(now + 0.2);
+            } else if (type === 'incorrect') {
+                oscillator.frequency.setValueAtTime(300, now);
+                oscillator.frequency.linearRampToValueAtTime(150, now + 0.3);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+            }
+        }
+        
+        document.body.addEventListener('click', initAudioContext, { once: true });
+        
+        // --- Fisher-Yates Karıştırma ---
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- Raundları Hazırla ---
+        function prepareRounds() {
+            // Veri: Index 0'daki 20 soru
+            const allQuestions = activitiesData[0].quiz;
+            // 20 soruyu ikiye bölüyoruz (10 + 10)
+            const round1 = allQuestions.slice(0, 10);
+            const round2 = allQuestions.slice(10);
+            allRounds = [round1, round2];
+            currentRoundIndex = 0;
+        }
+
+        // --- Mevcut Raundu Yükle ---
+        function loadCurrentRound() {
+            if (currentRoundIndex >= allRounds.length) return;
+            const currentRoundQuestions = allRounds[currentRoundIndex];
+            activityQueue = shuffle([...currentRoundQuestions]); 
+            grandTotalActivities = activityQueue.length;
+            currentActivityIndex = 0;
+        }
+
+        // --- ETKİNLİK YÜKLEYİCİ ---
+        function loadActivity() {
+            activityArea.innerHTML = '';
+            updateProgress();
+            
+            const activityData = activityQueue[currentActivityIndex]; 
+            // HATALI KARAKTER TEMİZLENDİ:
+            instructionText.textContent = "اِخْتَر الجَواب الصَّحيح.";
+            buildQuiz(activityData);
+        }
+
+        // --- Test Arayüzü ---
+        function buildQuiz(data) {
+            const quizContainer = document.createElement('div');
+            quizContainer.className = 'quiz-container';
+
+            const question = document.createElement('div');
+            question.className = 'question';
+            question.textContent = data.q;
+            quizContainer.appendChild(question);
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options';
+            
+            const optionsToShuffle = data.o.map((optionText, index) => {
+                return { text: optionText, isCorrect: (index === data.a) };
+            });
+            const shuffledOptions = shuffle(optionsToShuffle);
+            
+            shuffledOptions.forEach(option => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'option';
+                optionButton.textContent = option.text;
+                optionButton.onclick = () => {
+                    playSound('touch');
+                    checkQuizAnswer(option.isCorrect); 
+                };
+                optionsContainer.appendChild(optionButton);
+            });
+            quizContainer.appendChild(optionsContainer);
+            activityArea.appendChild(quizContainer);
+        }
+
+        // --- Cevap Kontrolü ---
+        function checkQuizAnswer(isCorrect) {
+            showFeedback(isCorrect);
+            if (isCorrect) {
+                scoreCorrect++;
+                setTimeout(nextActivity, 1200);
+            } else {
+                scoreIncorrect++;
+            }
+        }
+
+        // --- Geri Bildirim ---
+        function showFeedback(isCorrect) {
+            if (isCorrect) {
+                feedbackIcon.textContent = '✔';
+                feedbackIcon.className = 'correct';
+                playSound('correct');
+            } else {
+                feedbackIcon.textContent = '❌';
+                feedbackIcon.className = 'incorrect';
+                playSound('incorrect');
+            }
+            feedbackOverlay.classList.add('show');
+            if (!isCorrect) {
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('show');
+                }, 1200);
+            }
+        }
+
+        // --- Sonraki Etkinlik ---
+        function nextActivity() {
+            feedbackOverlay.classList.remove('show');
+            currentActivityIndex++; 
+
+            if (currentActivityIndex === grandTotalActivities) {
+                // Raund Bitti
+                currentRoundIndex++;
+                if (currentRoundIndex < allRounds.length) {
+                    loadCurrentRound();
+                    progressBar.style.width = '0%'; 
+                    loadActivity();
+                } else {
+                    showFinishScreen();
+                }
+            } else {
+                loadActivity();
+            }
+        }
+
+        // --- Bitiş Ekranı ---
+        function showFinishScreen() {
+            // HATALI KARAKTER TEMİZLENDİ:
+            activityArea.innerHTML = `
+                <div id="finish-screen">
+                    <p>أَحْسَنْت! لَقَد أَكْمَلْتَ جَميع الأَنْشِطَة.</p>
+                    <div class="score-display">
+                        <span class="score-item score-correct">✔ ${scoreCorrect}</span>
+                        <span class="score-item score-incorrect">❌ ${scoreIncorrect}</span>
+                    </div>
+                    <button id="replay-button" onclick="restartGame()">🔄</button>
+                </div>
+            `;
+            instructionText.textContent = "اِنْتَهَت الأَنْشِطَة";
+            progressDisplay.textContent = "اِكْتَمَل";
+            progressBar.style.width = '100%';
+            progressBar.style.backgroundColor = 'var(--success-color)';
+        }
+        
+        // --- Yeniden Başlat ---
+        window.restartGame = function() { // Global scope için window
+            playSound('touch');
+            scoreCorrect = 0;
+            scoreIncorrect = 0;
+            currentRoundIndex = 0; 
+            progressBar.style.width = '0%';
+            progressBar.style.backgroundColor = 'var(--accent-color)';
+            loadCurrentRound();
+            loadActivity();
+        }
+
+        // --- İlerleme Güncelleme ---
+        function updateProgress() {
+            if (grandTotalActivities === 0) {
+                 progressDisplay.textContent = `0 / 0`;
+                return;
+            }
+            if (currentActivityIndex === grandTotalActivities) return;
+            const currentTotal = currentActivityIndex + 1;
+            const percentage = (currentActivityIndex / grandTotalActivities) * 100;
+            progressDisplay.textContent = `${currentTotal} / ${grandTotalActivities}`;
+            progressBar.style.width = `${percentage}%`;
+        }
+        
+        // --- TAM EKRAN MANTIĞI ---
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Hata: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                document.body.classList.add('fullscreen');
+            } else {
+                document.body.classList.remove('fullscreen');
+            }
+        });
+
+        // --- Başlangıç ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if(activitiesData && activitiesData.length > 0) {
+                activitiesData.forEach(round => {
+                    if(round.quiz) {
+                        round.quiz.forEach(q => {
+                            q.o = q.o.map(opt => opt.replace('tEktUb', 'تَكْتُبُ')
+                                                    .replace('tEkOni', 'تَكُونِ')
+                                                    .replace('yEzhEbu', 'يَذْهَبُ')
+                                                    .replace('tEzhEbAn', 'تَذْهَبَان')
+                                                    .replace('ElmustEşfA', 'المُسْتَشْفَى')
+                                                    .replace('müderrisan', 'مُدَرِّسان')
+                                                    );
+                        });
+                    }
+                });
+            }
+            prepareRounds();
+            loadCurrentRound();
+            loadActivity();
+        });
+    </script>
+</body>
+</html>

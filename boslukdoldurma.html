@@ -387,26 +387,33 @@
         ];
 
        const activitiesData = [
-    { pre: "أَنا مَريض،", post: "صُداع", a: "عِنْدي", hint: "Mülkiyet/Aidiyet" },
-    { pre: "", post: "بِأَلَم في رَأْسي", a: "أَشْعُرُ", hint: "Fiil (Hissetmek)" },
-    { pre: "لا", post: "ماءً بارِدًا", a: "تَشْرَبْ", hint: "Nehyi Hazır (Olumsuz Emir)" },
-    { pre: "يَجِبُ", post: "أَنْ تَتَناوَلَ الدَّواء", a: ["عَلَيْك", "عَلَيْهَا"], hint: "Gereklilik İfadesi" }, 
-    { pre: "أَنا", post: "بِعَيْني", a: ["أُشاهد", "أَرى"], hint: "Fiil (Görmek)" },
-    { pre: "أَنا", post: "بِأُذُني", a: ["أَسْمَعُ", "سَمِعْتُ", "اِسْتَمَعْتُ", "أَسْتَمِعُ"], hint: "Fiil (Duymak)" },
-    { pre: "أَنا", post: "بِأَنْفي", a: "أَشُمُّ", hint: "Fiil (Koklamak)" },
-    { pre: "أَنا", post: "بِيَدي", a: "أَلْمِسُ", hint: "Fiil (Dokunmak)" },
-    { pre: "أَنا", post: "بِلِساني", a: ["أَذوقُ", "أَتَكَلَّمُ","أَتَحَدَّثُ"], hint: "Fiil (Tatmak)" },
-    { pre: "أَنا", post: "كُرَة السَّلَّة", a: ["أُفَضِّلُ", "أُحِبُّ", "أَلْعَبُ"], hint: "Fiil" },
-    { pre: "أُفَضِّلُ الرِّياضَة", post: "الرَّسْم", a: "عَلى", hint: "Harfi Cer" }, 
-    { pre: "«الطُّهور", post: "الْإِيمَانِ»", a: "شَطْرُ", hint: "Hadis-i Şerif" },
-    { pre: "أَغْسِلُ يَدَيَّ بِالماء وَ", post: "", a: "الصّابون", hint: "İsim" }, 
-    { pre: "", post: "تَذْهَبُ إِلى الطَّبيب؟", a: ["لِماذا", "مَتى"], hint: "Soru Edatı" }, 
-    { pre: "«اَلْوِقَايَةُ خَيْرٌ ", post: "الْعِلَاجِ»", a: "مِنَ", hint: "Harf-i Cer" }, 
-    { pre: "أَلْعَبُ كُرَة السَّلَّة وَكُرَة القَدَم", post: "أَصْدِقائي", a: "مَعَ", hint: "Edat" }, 
-    { pre: "أَنا أُحِبُّ قِراءَة ", post: "", a: ["الكُتُب", "الكِتَاب"], hint: "Çoğul" }, 
-    { pre: "أَهْتَمُّ ", post: "القِراءَة جِدًّا", a: "بِ", hint: "Harf-i Cer" },
-    { pre: "", post: "تَقولُ لِصَديقِكَ المَريض؟", a: ["ما", "ماذا"], hint: "Soru Edatı" },
-    { pre: "إِذا كانَتْ عِنْدَكَ حَرارَة، ", post: " تَفْعَل؟", a: ["ما", "ماذا"], hint: "Soru Edatı" }
+    // --- EVİN BÖLÜMLERİ (Tek ve Net Cevaplar) ---
+    { pre: "أُمّي تَطْبُخُ الطَّعام في", post: "", a: "الْمَطْبَخ", hint: "Evin Bölümü (Mutfak)" },
+    { pre: "أَغْسِلُ وَجْهي وَيَدَيَّ في", post: "", a: "الْحَمّام", hint: "Evin Bölümü (Banyo)" },
+    { pre: "أَنامُ لَيْلًا في غُرْفَة", post: "", a: "النَّوْم", hint: "Oda (Yatak Odası)" },
+    { pre: "نَجْلِسُ مَعَ الضُّيوف في غُرْفَة", post: "", a: "الْجُلوس", hint: "Oda (Oturma Odası)" },
+    { pre: "يوجَدُ حَوْلَ الْبَيْت", post: "واسِعَة", a: "حَديقَة", hint: "İsim (Bahçe)" },
+    { pre: "نُشاهِدُ", post: "في غُرْفَة الْجُلوس", a: "التِّلْفاز", hint: "Eşya (Televizyon)" },
+
+    // --- AİLE VE KİŞİLER (1 veya 2 Cevaplı) ---
+    { pre: "هَذا أَبي وَ هَذِهِ", post: "", a: ["أُمّي", "والِدَتي"], hint: "Aile Üyesi (Annem)" }, 
+    { pre: "أَنا", post: "أُسْرَتي كَثيرًا", a: "أُحِبُّ", hint: "Fiil (Seviyorum)" },
+    { pre: "أُخْتي", post: "تَلْعَبُ بِالدُّمْيَة", a: "الصَّغيرَة", hint: "Sıfat (Küçük - Müennes)" },
+    { pre: "تَتَكَوَّنُ", post: "مِنْ خَمْسَةِ أَفْراد", a: ["أُسْرَتي", "عائِلَتي"], hint: "İsim (Ailem)" },
+
+    // --- YER, YÖN VE ADRES (Net Cevaplar) ---
+    { pre: "", post: "تَسْكُنُ يا أحْمَد؟", a: "أَيْنَ", hint: "Soru Edatı (Nerede)" },
+    { pre: "بَيْتي", post: "مِنَ الْمَدْرَسَة", a: "قَريب", hint: "Sıfat (Yakın)" },
+    { pre: "الْمَدْرَسَة", post: "عَنِ الْبَيْت", a: "بَعيدَة", hint: "Sıfat (Uzak)" },
+    { pre: "بَيْتي في", post: "الْأَوَّل", a: "الطّابِق", hint: "İsim (Kat)" },
+    { pre: "", post: "عُنوانُ بَيْتِك؟", a: ["ما", "ماذا"], hint: "Soru Edatı (Ne)" },
+    { pre: "بَيْتي في شارِع", post: "", a: ["الْوَطَن", "السَّلام"], hint: "Özel İsim (Cadde adı örn: Vatan/Barış)" }, // Burada ipucuna göre öğrenci herhangi birini yazsa kabul olur.
+    
+    // --- GÜNLÜK İŞLER VE SIFATLAR ---
+    { pre: "أَنا", post: "مُبَكِّرًا جِدًّا", a: "أَسْتَيْقِظُ", hint: "Fiil (Uyanıyorum)" },
+    { pre: "أَتَناوَلُ", post: "فِي الصَّباح", a: "الْفُطور", hint: "Öğün (Kahvaltı)" },
+    { pre: "أَذْهَبُ إِلى", post: "بِالْحافِلَة", a: "الْمَدْرَسَة", hint: "Yer (Okul)" },
+    { pre: "الْبَيْتُ", post: "وَ جَميلٌ", a: ["كَبير", "واسِع"], hint: "Sıfat (Büyük/Geniş)" }
 ];
 
         const activityArea = document.getElementById('activity-area');
