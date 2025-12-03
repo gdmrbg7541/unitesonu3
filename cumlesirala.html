@@ -228,21 +228,35 @@
             animation: shake 0.4s ease-in-out;
         }
         
-        .word-item {
-            padding: 15px 25px; /* Dikey boşluk 12px'den 15px'e çıkarıldı */
-            color: white;
-            font-size: 2.8rem; 
-            font-weight: 700;
-            margin: 8px;
-            border-radius: 8px;
-            cursor: grab; 
-            user-select: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transform-origin: center center;
-            line-height: 1.9; /* Satır yüksekliği 1.6'dan 1.9'a çıkarıldı (Hemzeler için) */
-            display: inline-block; 
-            vertical-align: middle; /* Hizalama sorunu olmaması için eklendi */
-        }
+       .word-item {
+    /* İÇERİK DÜZENİ */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* YAZI TİPİ AYARLARI */
+    color: white;
+    font-size: 3.5rem; /* Çok büyük olursa mobilde taşar, 2.4 idealdir */
+    font-weight: 700;
+    
+    /* KRİTİK AYAR: Harf Kesilmesini Önleyen Kısım */
+    line-height: 2.5; /* Satır yüksekliğini artırdık (Hemzeler için yer açar) */
+    padding: 8px 16px; /* Kutunun içindeki boşluk */
+    
+    /* KUTU GÖRÜNÜMÜ */
+    margin: 8px; /* Kutular arası mesafe */
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    
+    /* ETKİLEŞİM */
+    cursor: grab; 
+    user-select: none;
+    transform-origin: center center;
+    
+    /* Güvenlik: Taşmaları gizleme, göster */
+    overflow: visible; 
+    height: auto; /* Sabit yükseklik olmasın, yazıya göre uzasın */
+}
         .word-item[draggable="true"]:active { cursor: grabbing; }
         .word-item[draggable="false"] { cursor: default; }
         .word-item:hover { filter: brightness(85%); }
@@ -432,7 +446,7 @@
 
     <script>
         // --- ETKİNLİK VERİLERİ ---
-        const activitiesData = [
+const activitiesData = [
     {
         s: ["أَعيشُ في مَدينَة قونْيا", "في مَدينَة قونْيا أَعيشُ"],
         w: ["أَعيشُ", "في", "مَدينَة", "قونْيا"]
