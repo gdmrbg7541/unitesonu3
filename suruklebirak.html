@@ -624,54 +624,56 @@
             '#ff6b6b', '#fca311', '#90be6d', '#43aa8b', '#577590', '#f94144'
         ];
 
-        const activityDataBank = [
-    // 1. TUR: MEVSİMLER, HAVA DURUMU VE KIYAFETLER (Ders 1 Odaklı)
+       const activityDataBank = [
+    // 1. TUR: YÖNLER, DOĞA VE MEKANLAR
     {
-        title: "صَنِّف الكَلِمات‫.‬", 
-        categories: ["فُصول", "حالَة الطَّقْس", "مَلابِس"], 
+        title: "صَنِّف الكَلِمات‫.‬", 
+        categories: ["جِهات", "طَبيعَة", "سِياحَة"], 
         words: [
-            // Mevsimler
-            { w: "الرَّبيع", cat: "فُصول" },   // İlkbahar
-            { w: "الصَّيْف", cat: "فُصول" },   // Yaz
-            { w: "الخَريف", cat: "فُصول" },   // Sonbahar
-            { w: "الشِّتاء", cat: "فُصول" },   // Kış
+            // Yönler (Hepsi burada)
+            { w: "شَمال", cat: "جِهات" },  // Kuzey
+            { w: "جَنوب", cat: "جِهات" },  // Güney
+            { w: "شَرْق", cat: "جِهات" },   // Doğu
+            { w: "غَرْب", cat: "جِهات" },   // Batı
 
-            // Hava Durumu
-            { w: "مُشْمِس", cat: "حالَة الطَّقْس" }, // Güneşli
-            { w: "مُمْطِر", cat: "حالَة الطَّقْس" }, // Yağmurlu
-            { w: "مُثْلِج", cat: "حالَة الطَّقْس" }, // Karlı
-            { w: "حارّ", cat: "حالَة الطَّقْس" },    // Sıcak
+            // Seyahat Eşyaları
+            { w: "جَواز سَفَر", cat: "سِياحَة" },
+            { w: "تَذْكِرَة", cat: "سِياحَة" },
+            { w: "حَقيبَة", cat: "سِياحَة" },
+            { w: "خَريطَة", cat: "سِياحَة" },
 
-            // Kıyafetler
-            { w: "مِعْطَف", cat: "مَلابِس" },    // Palto/Mont
-            { w: "قَميص", cat: "مَلابِس" },      // Gömlek
-            { w: "فُسْتان", cat: "مَلابِس" },    // Elbise
-            { w: "قُبَّعَة", cat: "مَلابِس" }    // Şapka
+            // Doğa
+            { w: "بَحْر", cat: "طَبيعَة" },
+            { w: "جَبَل", cat: "طَبيعَة" },
+            { w: "غابَة", cat: "طَبيعَة" },
+            { w: "بُحَيْرَة", cat: "طَبيعَة" } // Göl
+           
         ]
     },
 
-    // 2. TUR: RENKLER, SIFATLAR VE ALIŞVERİŞ EŞYALARI (Ders 2 Odaklı)
+    // 2. TUR: ULAŞIM, EŞYALAR VE FİİLLER
     {
-        title: "صَنِّف الكَلِمات‫.‬", 
-        categories: ["أَلْوان", "صِفات", "أَشْياء التَّسَوُّق"], 
+        title: "صَنِّف الكَلِمات‫.‬", 
+        categories: ["مُواصَلات", "أَفْعال", "أَماكِن"], 
         words: [
-            // Renkler
-            { w: "أَحْمَر", cat: "أَلْوان" },    // Kırmızı
-            { w: "أَزْرَق", cat: "أَلْوان" },    // Mavi
-            { w: "أَسْوَد", cat: "أَلْوان" },    // Siyah
-            { w: "أَبْيَض", cat: "أَلْوان" },    // Beyaz
+            // Ulaşım Araçları
+            { w: "طائِرَة", cat: "مُواصَلات" },
+            { w: "سَيّارَة", cat: "مُواصَلات" },
+            { w: "قِطار", cat: "مُواصَلات" },
+            { w: "سَفينَة", cat: "مُواصَلات" },
 
-            // Sıfatlar (Zıt Anlamlılar)
-            { w: "غالٍ", cat: "صِفات" },        // Pahalı
-            { w: "رَخيص", cat: "صِفات" },       // Ucuz
-            { w: "جَديد", cat: "صِفات" },       // Yeni
-            { w: "قَديم", cat: "صِفات" },       // Eski
-
-            // Alışveriş Eşyaları (Gıda ve Teknoloji Karışık)
-            { w: "سُكَّر", cat: "أَشْياء التَّسَوُّق" }, // Şeker
-            { w: "مِلْح", cat: "أَشْياء التَّسَوُّق" },  // Tuz
-            { w: "حاسوب", cat: "أَشْياء التَّسَوُّق" }, // Bilgisayar
-            { w: "جَوّال", cat: "أَشْياء التَّسَوُّق" }  // Cep Telefonu
+            // Fiiller
+            { w: "يُسافِرُ", cat: "أَفْعال" }, // Yolculuk yapıyor
+            { w: "يَرْكَبُ", cat: "أَفْعال" }, // Biniyor
+            { w: "يَزورُ", cat: "أَفْعال" },   // Ziyaret ediyor
+            { w: "يَتَجَوَّلُ", cat: "أَفْعال" }, // Geziyor
+ 
+            // Mekanlar
+            { w: "فُنْدُق", cat: "أَماكِن" },
+            { w: "مَسْجِد", cat: "أَماكِن" },
+            { w: "مُتْحَف", cat: "أَماكِن" },
+            { w: "مَطار", cat: "أَماكِن" }   // Havaalanı
+            
         ]
     }
 ];

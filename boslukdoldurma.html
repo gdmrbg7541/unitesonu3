@@ -551,7 +551,7 @@
                 <path d="M17 1H7C5.9 1 5 1.9 5 3v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-2 20H9v-1h6v1zm2-3H7V6h10v12z" />
             </svg>
         </div>
-        
+       
     </div>
 
     <script>
@@ -605,136 +605,143 @@
             ["Backspace", "ظ","ز","و","ة","ى","ر","ؤ","ء","ئ"] 
         ];
 
-       // --- Etkinlik Verileri ---
+        // --- Etkinlik Verileri ---
         const activitiesData = [
+   
+    // --- 1YER, YÖN VE ADRES (Net Cevaplar) ---
     
+    { pre: "بَيْتي", post: "مِنَ المَدْرَسَة", a: "قَريب", hint: "Sıfat (Yakın)" },
+    { pre: "المَدْرَسَة", post: "عَنِ البَيْت", a: "بَعيدَة", hint: "Sıfat (Uzak)" },
     
-    // 1. Cümle: Sabah erkenden uyanırım.
+    // 2 EKLENEN ANKARA SORUSU (Formatı düzenlendi):
+    { pre: "أَنْقَرَة مَدينَة مُهِمَّة، لِأَنَّها", post: "تُرْكِيا", a: "عاصِمَة", hint: "Yönetim merkezi / Başkent" },
+
+    // 3. Cümle: Konya Mevlana Müzesi ile meşhurdur.
     { 
-        pre: "في السَّنَة", 
-        post: "فُصول", 
-        a: "أَرْبَعَة", 
-        hint: "Sayı (Dört)" 
+        pre: "تَشْتَهِرُ قونْيا بِـ", 
+        post: "مَوْلانا", 
+        a: "مُتْحَف", 
+        hint: "Gezilecek yer (Müze)" 
     },
+    // 4. Cümle: Ankara Türkiye'nin ortasındadır.
     { 
-        pre: "في فَصْل الصَّيْف، الجَوّ", 
-        post: "", 
-        a: ["حَارّ", "مُشْمِس"], 
-        hint: "Sıfat (Sıcak veya Güneşli)" 
+        pre: "تَقَعُ أَنْقَرَة في", 
+        post: "تُرْكِيا", 
+        a: "وَسَط", 
+        hint: "Yön/Konum (Orta)" 
     },
-    
-   { 
-        pre: "في فَصْل الخَريف يَنْزِلُ", 
-        post: "", 
-        a: "المَطَر", 
-        hint: "İsim (Yağmur)" 
-    },
+    // 5. Cümle: Urfa'da Balıklı Göl'de gezdim.
     { 
-        pre: "في فَصْل الشِّتاء يَسْقُطُ", 
-        post: "", 
-        a: "الثَّلْج", 
-        hint: "İsim (Kar)" 
+        pre: "تَجَوَّلْتُ في", 
+        post: "الأَسْماك في أورْفَة", 
+        a: "بُحَيْرَة", 
+        hint: "Coğrafi yer (Göl)" 
     },
-    
+    // 6. Cümle: İstanbul'da Ayasofya Camii'ni ziyaret ettim.
     { 
-        pre: "في", 
-        post: "اِثْنا عَشَر شَهْرًا", 
-        a: "السَّنَة", 
-        hint: "İsim (Yıl)" 
+        pre: "زُرْتُ", 
+        post: "آياصوفْيا الكَبير في إِسْطَنْبول", 
+        a: "مَسْجِد", 
+        hint: "İbadet yeri (Cami)" 
     },
+    // 7. Cümle: Trabzon Türkiye'nin kuzeyindedir.
     { 
-        pre: "في الأُسْبوع", 
-        post: "أَيّام", 
-        a: "سَبْعَة", 
-        hint: "Sayı (Yedi)" 
+        pre: "تَقَعُ طِرابْزون في", 
+        post: "تُرْكِيا", 
+        a: "شَمال", 
+        hint: "Yön (Kuzey)" 
     },
+    // 8. Cümle: Mersin Türkiye'nin güneyindedir.
     { 
-        pre: "هُو يَلْبَسُ المِعْطَف في فَصْل", 
-        post: "", 
-        a: "الشِّتاء", 
-        hint: "İsim (Kış)" 
-    },
-    { 
-        pre: "تَتَساقَطُ", 
-        post: "الشَّجَر في فَصْل الخَريف", 
-        a: "أَوْراق", 
-        hint: "İsim (Yapraklar)" 
-    },
-    { 
-        pre: "تَلْبَسُ", 
-        post: "عِنْدَما تَشْعُرُ يَداك بِالبَرْد", 
-        a: "قُفّاز", 
-        hint: "İsim (Eldiven)" 
-    },
-   { 
-        pre: "آخُذُ مَعي", 
-        post: "في اليَوْم المُمْطِر", 
-        a: "المِظَلَّة", 
-        hint: "İsim (Şemsiye)" 
-    },
-   { 
-        pre: "لَوْ", 
-        post: "، أُريدُ كيلو مِن السُّكَّر", 
-        a: "سَمَحْت", 
-        hint: "İfade (Lütfen/Müsaadenle)" 
-    },
-    { 
-        pre: "هَلْ أَنْتَ", 
-        post: "شَيْئًا آخَر؟", 
-        a: "تُريدُ", 
-        hint: "Fiil (İstiyorsun)" 
-    },
-    { 
-        pre: "لَوْن القَميص 🟡", 
-        post: "", 
-        a: "أَصْفَر", 
-        hint: "Sıfat (Sarı)" 
+        pre: "تَقَعُ مَرْسين في", 
+        post: "تُرْكِيا", 
+        a: "جَنوب", 
+        hint: "Yön (Güney)" 
     },
     
+    // 9. Cümle: Türkiye Asya ve Avrupa arasındadır. [Kaynak: Ünite 3, Ders 1]
     { 
-        pre: "لَوْن الفُسْتان 🟤", 
+        pre: "تَقَعُ تُرْكِيا", 
+        post: "آسْيا وَأُوروبّا", 
+        a: "بَيْن", 
+        hint: "Mekan Zarfı (Arasında)" 
+    },
+    
+    // 10. Cümle: Yolculuk kaç saat sürer?
+    { 
+        pre: "كَم", 
+        post: "تَسْتَغْرِقُ الرِّحْلَة؟", 
+        a: "ساعَة", 
+        hint: "Zaman birimi (Saat)" 
+    },
+    
+    // 11. Cümle: Kırmızı ışıkta dururum.
+    { 
+        pre: "أَقِفُ عِنْد الضَّوْء", 
         post: "", 
-        a: "بُنِّيّ", 
-        hint: "Sıfat (kahverengi)" 
+        a: "الأَحْمَر", 
+        hint: "Renk (Kırmızı)" 
     },
+    // 12. Cümle: Yeşil ışıkta geçerim.
     { 
-        pre: "لَوْن القُبَّعَة 🔵", 
+        pre: "أَعْبُرُ عِنْد الضَّوْء", 
         post: "", 
-        a: "أَزْرَق", 
-        hint: "Sıfat (Mavi)" 
+        a: "الأَخْضَر", 
+        hint: "Renk (Yeşil)" 
     },
+    
+    // 13. Cümle: Otelde uygun bir oda istiyorum.
     { 
-        pre: "", 
-        post: "حَليمَة الشّاي وَالقَهْوَة", 
-        a: ["تَشْرَبُ", "شَرِبَتْ"], 
-        hint: "Fiil (İçiyor veya İçti)" 
+        pre: "أُريدُ", 
+        post: "مُناسِبَة في الفُنْدُق", 
+        a: "غُرْفَة", 
+        hint: "Yer (Oda)" 
     },
+// 14. Cümle: Erzurum Türkiye'nin doğusundadır. [Kaynak: Ünite 3, Ders 1]
     { 
-        pre: "مَنْ غَشَّنا", 
-        post: "مِنّا", 
-        a: "فَلَيْسَ", 
-        hint: "İfade (Değildir/Yoktur)" 
+        pre: "تَقَعُ أَرْضُروم في", 
+        post: "تُرْكِيا", 
+        a: "شَرْق", 
+        hint: "Yön (Doğu)" 
     },
+// 15. Cümle: Ve aleykümü's-selam ey Yunus. [Kaynak: Ünite 3, Ders 1]
     { 
-        pre: "بِماذا تَشْعُرُ في", 
-        post: "الصَّيْف؟", 
-        a: "فَصْل", 
-        hint: "İsim (Mevsim)" 
+        pre: "وَعَلَيْكُم", 
+        post: "يا يونُس", 
+        a: "السَّلام", 
+        hint: "Selamlaşma (Barış)" 
     },
 
+    // 16. Cümle: Hızlı tren istasyona ulaştı (vardı). [Kaynak: Ünite 3, Ders 2]
     { 
         pre: "", 
-        post: "يَوْمًا في الأُسْبوع؟", 
-        a: "كَم", 
-        hint: "Soru Edatı (Kaç)" 
+        post: "القِطار السَّرِيع إِلى المَحَطَّة", 
+        a: "وَصَلَ", 
+        hint: "Fiil (Ulaştı/Vardı)" 
     },
+
+    // 17. Cümle: Furkan ne zaman ülkesine dönecek? [Kaynak: Ünite 3, Ders 2]
     { 
-        pre: "لَوْن السَّيّارَة 🔴", 
-        post: "", 
-        a: "أَحْمَر", 
-        hint: "Sıfat (Kırmızı)" 
+        pre: "", 
+        post: "سَيَرْجِعُ فُرْقان إِلى بَلَدِه؟", 
+        a: "مَتى", 
+        hint: "Soru Edatı (Ne zaman)" 
     },
-    
+
+    // 19. Cümle: Sarı ışıkta hazırlanırım (beklerim). [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "أَسْتَعِدُّ عِنْد الضَّوْء", 
+        post: "", 
+        a: "الأَصْفَر", 
+        hint: "Renk (Sarı)" 
+    },
+// 20. Cümle: Okulum evimden uzaktır. [Kaynak: Ünite 3, Ders 2]
+    { 
+        pre: "مَدْرَسَتي بَعيدَة", 
+        post: "بَيْتي", 
+        a: "عَن", 
+        hint: "Harf-i Cer (-den/-dan)" 
+    }
 ];
 
         // --- Gerekli Elementler ---

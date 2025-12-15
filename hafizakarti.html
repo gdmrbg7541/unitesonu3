@@ -438,31 +438,30 @@
 
     <script>
         // --- 2 Seviyeli Oyun Verisi ---
-        const levelsData = [
-            // Seviye 1: Mevsimler, Hava Durumu ve Kıyafetler (Ders 1 Ağırlıklı)
-            [
-                { id: 1, type: 'word', content: 'صَيْف' }, { id: 1, type: 'emoji', content: '☀️' }, // Yaz
-                { id: 2, type: 'word', content: 'شِتاء' }, { id: 2, type: 'emoji', content: '❄️' }, // Kış
-                { id: 3, type: 'word', content: 'مَطَر' }, { id: 3, type: 'emoji', content: '🌧️' }, // Yağmur
-                { id: 4, type: 'word', content: 'مِعْطَف' }, { id: 4, type: 'emoji', content: '🧥' }, // Palto/Mont
-                { id: 5, type: 'word', content: 'أَحْمَر' }, { id: 5, type: 'emoji', content: '🔴' }, // Gömlek/Tişört
-                { id: 6, type: 'word', content: 'فُسْتان' }, { id: 6, type: 'emoji', content: '👗' }, // Elbise
-                { id: 7, type: 'word', content: 'قُبَّعَة' }, { id: 7, type: 'emoji', content: '🧢' }, // Şapka
-                { id: 8, type: 'word', content: 'أَصْفَر' }, { id: 8, type: 'emoji', content: '🟡' }, // Şemsiye
-            ],
-            // Seviye 2: Alışveriş, Teknoloji ve Gıda (Ders 2 Ağırlıklı)
-            [
-                { id: 9, type: 'word', content: 'سُوق' }, { id: 9, type: 'emoji', content: '🛒' }, // Çarşı/Pazar
-                { id: 10, type: 'word', content: 'نَقْد' }, { id: 10, type: 'emoji', content: '💵' }, // Nakit Para
-                { id: 11, type: 'word', content: 'بِطاقَة' }, { id: 11, type: 'emoji', content: '💳' }, // Kart
-                { id: 12, type: 'word', content: 'جَوّال' }, { id: 12, type: 'emoji', content: '📱' }, // Cep Telefonu
-                { id: 13, type: 'word', content: 'حاسوب' }, { id: 13, type: 'emoji', content: '💻' }, // Bilgisayar
-                { id: 14, type: 'word', content: 'تُفّاح' }, { id: 14, type: 'emoji', content: '🍎' }, // Elma
-                { id: 15, type: 'word', content: 'مِظَلَّة' }, { id: 15, type: 'emoji', content: '☔' }, // Ekmek
-                { id: 16, type: 'word', content: 'طَماطِم' }, { id: 16, type: 'emoji', content: '🍅' }  // Domates
-            ]
-        ];
-
+         const levelsData = [
+    // Seviye 1: Ulaşım Araçları ve Seyahat (Ders 2 Ağırlıklı)
+    [
+        { id: 1, type: 'word', content: 'طائِرَة' }, { id: 1, type: 'emoji', content: '✈️' }, // Uçak
+        { id: 2, type: 'word', content: 'سَيّارَة' }, { id: 2, type: 'emoji', content: '🚗' }, // Araba
+        { id: 3, type: 'word', content: 'حافِلَة' }, { id: 3, type: 'emoji', content: '🚌' }, // Otobüs
+        { id: 4, type: 'word', content: 'سَفينَة' }, { id: 4, type: 'emoji', content: '🚢' }, // Gemi
+        { id: 5, type: 'word', content: 'قِطار' }, { id: 5, type: 'emoji', content: '🚆' }, // Tren
+        { id: 6, type: 'word', content: 'شاحِنَة' }, { id: 6, type: 'emoji', content: '🚛' }, // Havaalanı
+        { id: 7, type: 'word', content: 'فُنْدُق' }, { id: 7, type: 'emoji', content: '🏢' }, // Otel
+        { id: 8, type: 'word', content: 'حَقيبَة' }, { id: 8, type: 'emoji', content: '🧳' }, // Valiz/Çanta
+    ],
+    // Seviye 2: Mekanlar ve Şehir (Ders 1 Ağırlıklı)
+    [
+        { id: 9, type: 'word', content: 'مَسْجِد' }, { id: 9, type: 'emoji', content: '🕌' }, // Cami
+        { id: 10, type: 'word', content: 'قَصْر' }, { id: 10, type: 'emoji', content: '🏰' }, // Müze
+        { id: 11, type: 'word', content: 'بَحْر' }, { id: 11, type: 'emoji', content: '🌊' }, // Deniz
+        { id: 12, type: 'word', content: 'جَبَل' }, { id: 12, type: 'emoji', content: '⛰️' }, // Dağ
+        { id: 13, type: 'word', content: 'مَدينَة' }, { id: 13, type: 'emoji', content: '🏙️' }, // Şehir
+        { id: 14, type: 'word', content: 'قَلْعَة' }, { id: 14, type: 'emoji', content: '🏰' }, // Kale
+        { id: 15, type: 'word', content: 'إِشارَة' }, { id: 15, type: 'emoji', content: '🚦' }, // Trafik Işığı
+        { id: 16, type: 'word', content: 'خَريطَة' }, { id: 16, type: 'emoji', content: '🗺️' }  // Harita
+    ]
+];
         // --- Elementler ---
         const gameBoard = document.getElementById('game-board');
         const instructionText = document.getElementById('instruction-text');
