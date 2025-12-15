@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <title>قِيَمي - البحث عن الكلمات</title>
     <link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Temel Sayfa Stilleri (ORİJİNAL) --- */
+        /* --- Temel Sayfa Stilleri --- */
         :root {
             --accent-color: #0d6efd; 
             --success-color: #28a745;
@@ -15,24 +15,51 @@
             --bg-light: #f8f9fa;
             --font-arabic: 'Markazi Text', 'Noto Naskh Arabic', 'Tahoma', 'Arial', sans-serif;
             
-            /* Varsayılan (Masaüstü/Yatay) boyutlar */
+            /* GÜNCELLEME: Varsayılan (Masaüstü) boyutlar. JS bunları mobil için ezecek. */
             --grid-size-cols: 10;
             --grid-size-rows: 8;
         }
 
-        body {
-            font-family: var(--font-arabic);
-            background-color: #e9ecef;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            font-weight: 400;
-        }
+        /* body etiketi etrafındaki boşlukları tamamen sıfırlamak için */
+    body {
+        font-family: var(--font-arabic);
+        background-color: #e9ecef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100vw; /* Ekran genişliğinin tamamını kapla */
+        margin: 0;
+        padding: 0; /* Yeni Eklendi: Sayfa kenarında boşluk bırakma */
+        overflow: hidden;
+        font-size: 1.1rem; /* ... diğer font ayarları ... */
+    }
 
-        /* --- Ana Etkinlik Alanı (ORİJİNAL) --- */
+    /* Ana Oyun Konteyneri (#game-container) */
+    #game-container {
+        /* Başlangıçta neredeyse tam ekran */
+        width: 98vw;  
+        height: 98vh; 
+        max-width: none; /* Yatay kısıtlamayı kaldır */
+        
+        /* Orijinal stil kurallarını koru */
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Tam Ekran Moduna Geçildiğinde Ekstra Boşlukları Kaldır */
+    body.fullscreen #game-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+        /* --- Ana Etkinlik Alanı --- */
         .activity-container {
             position: relative;
             background: #ffffff;
@@ -47,7 +74,7 @@
             max-width: calc(90vh * 16 / 9); /* 16:9 */
         }
         
-        /* --- Header (ORİJİNAL) --- */
+        /* --- Header --- */
         .header {
             padding: 15px 25px;
             border-bottom: 1px solid #dee2e6;
@@ -100,7 +127,7 @@
             fill: currentColor;
         }
         
-        /* --- Tam Ekran Düğmesi (ORİJİNAL) --- */
+        /* --- Tam Ekran Düğmesi --- */
         #fullscreen-btn {
             background: #f0f0f0;
             color: #555;
@@ -129,7 +156,7 @@
         body.fullscreen #fullscreen-btn .icon-close { display: block; }
 
 
-        /* --- Asıl Etkinlik Alanı (ORİJİNAL) --- */
+        /* --- Asıl Etkinlik Alanı --- */
         .activity-area {
             flex-grow: 1;
             padding: 15px 5px; 
@@ -141,12 +168,15 @@
             align-items: center;
         }
 
-        /* --- Izgara Stilleri (ORİJİNAL) --- */
+        /* --- Izgara Stilleri --- */
         #puzzle-grid-container {
             flex-grow: 1;
             height: 100%;
             max-height: 100%; 
+            
+            /* GÜNCELLEME: En/boy oranı artık CSS değişkenlerinden dinamik olarak geliyor */
             aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows); 
+            
             display: grid;
             grid-template-columns: repeat(var(--grid-size-cols), 1fr);
             grid-template-rows: repeat(var(--grid-size-rows), 1fr);
@@ -165,7 +195,7 @@
             justify-content: center;
             align-items: center;
             font-size: 4.5vmin; 
-            font-weight: 400;
+            font-weight: 400; /* Izgara harfleri normal (ince) */
             color: #333;
             cursor: pointer;
             border-bottom: 3px solid #999; 
@@ -179,6 +209,7 @@
             border-top: none;
         }
 
+        
         /* Seçim Vurguları */
         .grid-cell.selecting {
             background-color: #b3d4fc; 
@@ -190,7 +221,8 @@
             transition: background-color 0.3s ease;
         }
 
-        /* --- Kelime Listesi Stilleri (ORİJİNAL) --- */
+
+        /* --- Kelime Listesi Stilleri --- */
         #word-list-container {
             flex-basis: auto; 
             width: 100%;
@@ -215,7 +247,7 @@
 
         .word-list-item {
             font-size: 1.8rem; 
-            font-weight: 700;
+            font-weight: 700; /* Kelime listesi kalın */
             color: #555;
             transition: all 0.3s ease;
             border-left: 1px solid #ccc;
@@ -233,7 +265,7 @@
         }
 
 
-        /* --- Geri Bildirim Ekranı (ORİJİNAL) --- */
+        /* --- Geri Bildirim Ekranı (✔ / ❌) --- */
         .feedback-overlay {
             position: absolute;
             top: 0;
@@ -272,8 +304,11 @@
             transform: rotate(-90deg);
             background-color: #f0f0f0;
         }
+        .feedback-overlay.show #replay-button-end {
+            display: block;
+        }
         
-        /* --- Ana Konteynırın Tam Ekran Davranışı (ORİJİNAL) --- */
+        /* --- Ana Konteynırın Tam Ekran Davranışı --- */
         body.fullscreen .activity-container {
             width: 100vw;
             height: calc(100vw * 9 / 16);    
@@ -283,141 +318,69 @@
             box-shadow: none;
         }
 
-        /* =========================================
-           YENİ EKLENEN KISIMLAR (Özellikler)
-           ========================================= */
 
-        /* 1. BAŞLANGIÇ EKRANI (Start Screen) */
-        #start-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0d6efd; /* Tema rengi */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999; 
-            color: white;
-            transition: opacity 0.5s ease;
-        }
-
-        #start-btn {
-            background-color: #ffc107;
-            color: #333;
-            border: none;
-            padding: 15px 40px;
-            font-size: 2.5rem;
-            font-family: var(--font-arabic);
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #d39e00;
-            transition: transform 0.1s, box-shadow 0.1s;
-        }
-
-        #start-btn:active {
-            transform: translateY(5px);
-            box-shadow: 0 0 0 #d39e00;
-        }
-        
-        #start-title {
-            font-size: 3.5rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        /* 2. DÖNDÜRME UYARISI (Dikey Mod Engeli) */
-        #rotate-message {
-            display: none; /* Varsayılan gizli */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #212529;
-            z-index: 10000; /* Her şeyin üstünde */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-        }
-
-        .phone-icon {
-            width: 60px;
-            height: 100px;
-            border: 3px solid white;
-            border-radius: 8px;
-            position: relative;
-            margin-bottom: 20px;
-            animation: rotate-phone 2s infinite ease-in-out;
-        }
-        
-        .phone-icon::after {
-            content: '';
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        @keyframes rotate-phone {
-            0%, 10% { transform: rotate(0deg); }
-            40%, 60% { transform: rotate(-90deg); }
-            90%, 100% { transform: rotate(-90deg); }
-        }
-
-        /* 3. MOBİL VE DİKEY ALGILAMA */
-        /* Eğer ekran PORTRAIT (Dikey) ise oyunu gizle, uyarıyı göster */
-        @media only screen and (orientation: portrait) {
-            #rotate-message {
-                display: flex; 
-            }
+        /* --- Mobil Düzen --- */
+        @media (orientation: portrait) {
             .activity-container {
-                display: none !important; 
+                width: 95vw;
+                height: calc(95vw * 16 / 9); /* 9:16 */
+                max-height: 95vh;
+                max-width: calc(95vh * 9 / 16); /* 9:16 */
             }
-            #start-screen {
-                display: none; /* Dikeyken start ekranı da görünmesin, sadece uyarı */
+
+            .header {
+                grid-template-columns: auto 1fr auto; 
+                gap: 10px;
+                padding: 10px 15px;
             }
-        }
-        
-        /* Mobil YATAY (Landscape) olduğunda orijinal tasarımı biraz küçültmek gerekebilir */
-        @media only screen and (orientation: landscape) and (max-height: 500px) {
-             .header { padding: 5px 15px; }
-             #instruction-text { font-size: 1.5rem; }
-             .icon-button { width: 35px; height: 35px; font-size: 1.5rem; }
-             .activity-area { padding: 5px; gap: 5px; }
-             #word-list-container { padding: 5px; }
-             .word-list-item { font-size: 1.4rem; padding-left: 10px; }
-             /* Izgarayı ekrana sığdırmak için */
-             .activity-container {
-                height: 95vh;
-                width: calc(95vh * 16 / 9);
-             }
+            #instruction-text { font-size: 1.4rem; }
+            .icon-button { width: 45px; height: 45px; }
+            
+            #fullscreen-btn { width: 45px; height: 45px; }
+
+            .activity-area {
+                gap: 10px;
+            }
+            
+            #word-list-container {
+                flex-basis: auto; 
+                flex-shrink: 1;
+                max-height: 120px; 
+            }
+            #word-list {
+                gap: 5px 15px;
+            }
+            .word-list-item { 
+                font-size: 1.7rem; 
+                padding-left: 10px;
+            }
+            
+            #puzzle-grid-container {
+                flex-grow: 1; 
+                width: 100%;
+                height: auto;
+                /* GÜNCELLEME: En/boy oranı artık CSS değişkenlerinden dinamik olarak geliyor */
+                aspect-ratio: var(--grid-size-cols) / var(--grid-size-rows);
+                max-height: none; 
+            }
+            
+            .grid-cell {
+                 /* GÜNCELLEME: Yazı tipi boyutu ızgara boyutuna daha iyi uyması için ayarlandı */
+                 font-size: 7.5vmin; 
+            }
+            
+            /* --- Mobil (Dikey) Ekran Davranışı --- */
+            body.fullscreen .activity-container {
+                width: 100vw;
+                height: calc(100vw * 16 / 9);
+                max-height: 100vh;
+                max-width: calc(100vh * 9 / 16);
+            }
         }
 
     </style>
 </head>
 <body>
-
-    <div id="rotate-message">
-        <div class="phone-icon"></div>
-        <h2>يرجى تدوير الجهاز</h2>
-        <p>Lütfen telefonu yan çevirin</p>
-    </div>
-
-    <div id="start-screen">
-      
-        <button id="start-btn" onclick="startAndFullscreen()">اِبْدَأْ </button>
-    </div>
 
     <div class="activity-container">
         
@@ -469,12 +432,15 @@
         // --- Kelime Verisi ---
         const colors = ['#dc3545', '#fd7e14', '#ffc107', '#28a745', '#20c997', '#0d6efd', '#6f42c1', '#e83e8c'];
         
-        // TÜM SEVİYELER VERİSİ (Sadece Ünite 2: Sağlık ve Hobiler)
-        const allLevelsData = [
-    // Seviye 1: Ulaşım Araçları ve Seyahat
-    [
+        // GÜNCELLEME: Seviyeler 'Masaüstü' ve 'Mobil' olarak ikiye ayrıldı
+        
+        // MASAÜSTÜ SEVİYELERİ (Orijinal 10x8 Izgara için)
+        // MASAÜSTÜ SEVİYELERİ (Her biri 6 Kelime)
+        // Dosya 1 (Meslekler/Akrabalar) ve Dosya 2 (Güzel Davranışlar) içeriğine göre düzenlenmiştir.
+        const desktopLevels = [
+           [
         { word: 'طائرة', color: colors[0], emoji: '✈️' },  // Uçak
-        { word: 'سيارة', color: colors[1], emoji: '🚗' },  // Araba
+        { word: 'سيّارة', color: colors[1], emoji: '🚗' },  // Araba
         { word: 'حافلة', color: colors[2], emoji: '🚌' },  // Otobüs
         { word: 'سفينة', color: colors[3], emoji: '🚢' },  // Gemi
         { word: 'قطار', color: colors[4], emoji: '🚆' },   // Tren
@@ -494,17 +460,84 @@
         { word: 'خريطة', color: colors[7], emoji: '🗺️' }   // Harita
     ]
 ];
-        // MOBİL SEVİYELER - ARTIK KULLANILMIYOR ÇÜNKÜ ZORUNLU YATAY MOD VAR
-        // Mobil yatay modda da masaüstü (geniş) ızgara kullanılacak.
+        // MOBİL SEVİYELER
+        const mobileLevels = [
+            // Mobil 1: Kimlik ve Karakter
+            [
+                { word: 'لسان', color: colors[0], emoji: '👅' },   
+                { word: 'عين', color: colors[1], emoji: '👁️' },   
+                { word: 'أذن', color: colors[2], emoji: '👂' },   
+                { word: 'أسنان', color: colors[3], emoji: '🦷' }
+            ],
+            // Mobil 2: Zıtlıklar
+            [
+                { word: 'صداع', color: colors[0], emoji: '🤦' },   
+                { word: 'زكام', color: colors[1], emoji: '🤧' },   
+                { word: 'مغص', color: colors[2], emoji: '🤢' },   
+                { word: 'حرارة', color: colors[3], emoji: '🌡️' }
+            ],
+            // Mobil 3: Kariyer ve Hedefler
+            [
+                { word: 'سباحة', color: colors[4], emoji: '🏊' }, 
+                { word: 'كرة', color: colors[5], emoji: '⚽' },   
+                { word: 'سلّة', color: colors[6], emoji: '🏀' },   
+                { word: 'عطلة', color: colors[7], emoji: '🏖️' }
+            ],
+            // Mobil 4: Sanat ve Kültür
+            [
+                { word: 'رسم', color: colors[2], emoji: '🎨' },   
+                { word: 'قراءة', color: colors[3], emoji: '📖' }, 
+                { word: 'موسيقى', color: colors[4], emoji: '🎵' }, 
+                { word: 'مسرح', color: colors[5], emoji: '🎭' }
+            ]
+        ];
+
         
         const arabicLetters = 'أبتثجحخدذرزسشصضطظعغفقكلمنهوي'.split('');
         
+        // GÜNCELLEME: Izgara boyutları dinamik olarak ayarlanacak
         const desktopGridCols = 10;
         const desktopGridRows = 8;
+        const mobileGridCols = 8;
+        const mobileGridRows = 8;
         
         let activeGridCols;
         let activeGridRows;
         let activeLevelSet;
+        
+        // --- YENİ EKLENEN FONKSİYONLAR ---
+
+        // Şedde (ّ) işaretini iki harfe dönüştüren fonksiyon
+        // Örnek: 'مدرّس' -> 'مدررس' (2 harfe açar)
+        function unShedda(word) {
+            let newWord = '';
+            for (let i = 0; i < word.length; i++) {
+                const char = word[i];
+                if (char === 'ّ') { // Şedde karakteri
+                    // Bir önceki harfi tekrar ekle
+                    if (newWord.length > 0) {
+                        const prevChar = newWord[newWord.length - 1];
+                        newWord += prevChar;
+                    }
+                } else {
+                    newWord += char;
+                }
+            }
+            // Kelimenin başındaki şeddeyi (eğer varsa) ve kelimenin sonundaki şeddeyi temizler.
+            return newWord.replace('ّ', ''); 
+        }
+
+        // Şedde dönüşümünü tüm kelime setlerine uygulayan fonksiyon
+        function preprocessLevels(levels) {
+            return levels.map(level => 
+                level.map(data => ({
+                    ...data,
+                    // Orijinal kelimeyi (word) ve şeddesiz halini (processedWord) tut
+                    processedWord: unShedda(data.word) 
+                }))
+            );
+        }
+        // --- YENİ EKLENEN FONKSİYONLAR BİTİŞİ ---
 
         // --- Gerekli Elementler ---
         const gridContainer = document.getElementById('puzzle-grid-container');
@@ -527,43 +560,15 @@
         let selectionStart = null;
         let currentSelection = [];
         
+        // Mobil cihaz algılama fonksiyonu
         function isMobileDevice() {
             return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        }
-
-        // --- YENİ EKLENEN FONKSİYON: Başla ve Tam Ekran Yap ---
-        function startAndFullscreen() {
-            const startScreen = document.getElementById('start-screen');
-            const el = document.documentElement;
-
-            // 1. Ses Bağlamını Başlat (Kullanıcı etkileşimi şart)
-            initAudioContext();
-
-            // 2. Tam Ekrana Geç
-            if (el.requestFullscreen) {
-                el.requestFullscreen().catch(err => console.log(err));
-            } else if (el.mozRequestFullScreen) {
-                el.mozRequestFullScreen();
-            } else if (el.webkitRequestFullscreen) {
-                el.webkitRequestFullscreen();
-            } else if (el.msRequestFullscreen) {
-                el.msRequestFullscreen();
-            }
-
-            // 3. Başlangıç ekranını gizle
-            startScreen.style.opacity = '0';
-            setTimeout(() => {
-                startScreen.style.display = 'none';
-            }, 500);
         }
 
         // --- SES FONKSİYONLARI ---
         function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
             }
         }
         
@@ -601,11 +606,15 @@
             }
         }
         
+        document.body.addEventListener('click', initAudioContext, { once: true });
+
+
         // --- OYUN KURULUMU ---
 
         function initializeGame() {
+            // wordData'nın artık processed kelimeleri içerdiğini varsayıyoruz
             wordData = activeLevelSet[currentLevel];
-            wordsToFind = wordData.map(data => data.word);
+            wordsToFind = wordData.map(data => data.word); // Bulunacak kelime listesi (Orijinal hali)
 
             foundWords = [];
             grid = [];
@@ -618,6 +627,7 @@
 
             renderWordList();
             
+            // GÜNCELLEME: Dinamik ızgara boyutları kullanılıyor
             for (let r = 0; r < activeGridRows; r++) {
                 grid[r] = [];
                 gridCells[r] = [];
@@ -636,32 +646,44 @@
                 const li = document.createElement('li');
                 li.className = 'word-list-item';
                 li.id = `word-${data.word}`;
-                li.textContent = `${data.emoji} ${data.word}`;
+                li.textContent = `${data.emoji} ${data.word}`; // Orijinal kelimeyi göster
                 li.dataset.color = data.color; 
                 wordListElement.appendChild(li);
             });
         }
         
-        function placeWords() {
-            const directions = [
-                { dr: 0, dc: 1 },  // Yatay
-                { dr: 1, dc: 0 },  // Dikey
-                { dr: 1, dc: 1 }   // Çapraz
+       function placeWords() {
+            // SADECE MEVCUT İKİ YÖN KULLANILACAK
+            const twoDirections = [
+                { dr: 1, dc: 0 },   // Yukarıdan Aşağıya (Dikey)
+                { dr: 0, dc: 1 }    // Soldan Sağa (Yatay)
             ];
+            
+            // Yerleştirme verimliliğini artırmak için kelimeleri uzunluklarına göre sıralayabiliriz.
+            const sortedWordData = [...wordData].sort((a, b) => b.processedWord.length - a.processedWord.length);
 
-            for (const word of wordsToFind) {
+            for (const data of sortedWordData) {
+                const wordToPlace = data.processedWord; 
+                
                 let placed = false;
                 let attempts = 0;
                 
-                while (!placed && attempts < 100) {
+                // Her deneme seti için yönleri rastgele karıştır
+                const shuffledDirections = [...twoDirections].sort(() => 0.5 - Math.random());
+                
+                // 200 deneme yap
+                while (!placed && attempts < 200) { 
                     attempts++;
-                    const dir = directions[Math.floor(Math.random() * directions.length)];
+                    
                     const r = Math.floor(Math.random() * activeGridRows);
                     const c = Math.floor(Math.random() * activeGridCols);
 
-                    if (canPlaceWord(word, r, c, dir)) {
-                        for (let i = 0; i < word.length; i++) {
-                            grid[r + i * dir.dr][c + i * dir.dc] = word[i];
+                    // Her denemede, karıştırılmış iki yönden birini kullan
+                    const dir = shuffledDirections[attempts % shuffledDirections.length];
+
+                    if (canPlaceWord(wordToPlace, r, c, dir)) { 
+                        for (let j = 0; j < wordToPlace.length; j++) {
+                            grid[r + j * dir.dr][c + j * dir.dc] = wordToPlace[j];
                         }
                         placed = true;
                     }
@@ -674,11 +696,12 @@
                 const newRow = r + i * dir.dr;
                 const newCol = c + i * dir.dc;
 
+                // GÜNCELLEME: Dinamik ızgara boyutları kullanılıyor
                 if (newRow >= activeGridRows || newCol >= activeGridCols || newRow < 0 || newCol < 0) {
                     return false;
                 }
                 const cell = grid[newRow][newCol];
-                if (cell !== null && cell !== word[i]) { 
+                if (cell !== null) { 
                     return false;
                 }
             }
@@ -686,6 +709,7 @@
         }
 
         function fillEmptyCells() {
+            // GÜNCELLEME: Dinamik ızgara boyutları kullanılıyor
             for (let r = 0; r < activeGridRows; r++) {
                 for (let c = 0; c < activeGridCols; c++) {
                     if (grid[r][c] === null) {
@@ -698,6 +722,7 @@
         function renderGrid() {
             gridContainer.innerHTML = ''; 
             
+            // GÜNCELLEME: Dinamik ızgara boyutları kullanılıyor
             for (let r = 0; r < activeGridRows; r++) {
                 for (let c = 0; c < activeGridCols; c++) {
                     const cell = document.createElement('div');
@@ -739,6 +764,7 @@
 
         // --- SEÇİM MANTIĞI ---
         
+        // DÜZELTME: Dokunmatik kaydırmada doğru harfi bulması için
         function getCellFromEvent(e) {
             if (e.clientX && e.clientY) {
                 const element = document.elementFromPoint(e.clientX, e.clientY);
@@ -793,6 +819,7 @@
             selectionStart = null;
         }
         
+        // DÜZELTME: "Titreyen" parmaklar için "affedici" kaydırma
         function getCellsInLine(start, end) {
             const line = [];
             const diff_r = end.row - start.row;
@@ -826,21 +853,33 @@
             return line;
         }
         
-        // --- KONTROL MANTIĞI ---
+        // --- KONTROL MANTIĞI (GÜNCELLENDİ) ---
         
         function checkSelection() {
             if (currentSelection.length < 2) return;
             
-            const selectedWord = currentSelection.map(cell => cell.textContent).join('');
-            const selectedWordReversed = selectedWord.split('').reverse().join('');
+            // YENİ: Kullanıcının ızgaradan seçtiği kelime
+            const selectedWordRaw = currentSelection.map(cell => cell.textContent).join(''); 
             
             let found = false;
             
-            for (const word of wordsToFind) {
-                if (foundWords.includes(word)) continue; 
+            for (const data of wordData) {
+                const originalWord = data.word;         // Orijinal (şeddeli olabilen) kelime
+                const processedWord = data.processedWord; // Izgarada yer alan (şeddesiz) kelime
                 
-                if (word === selectedWord || word === selectedWordReversed) {
-                    markAsFound(word); 
+                if (foundWords.includes(originalWord)) continue; 
+                
+                // Seçilen ham kelimeyi şeddesiz kelimeyle karşılaştır
+                if (selectedWordRaw === processedWord) {
+                    markAsFound(originalWord); // Orijinal kelimeyi buldu olarak işaretle
+                    found = true;
+                    break;
+                }
+                
+                // Tersine döndürülmüş kelime kontrolü
+                const processedWordReversed = processedWord.split('').reverse().join('');
+                if (selectedWordRaw === processedWordReversed) {
+                    markAsFound(originalWord); // Orijinal kelimeyi buldu olarak işaretle
                     found = true;
                     break;
                 }
@@ -874,28 +913,17 @@
 
         // --- Bitiş Ekranı ve Yeniden Başlatma ---
         function showWinScreen() {
-            const replayBtn = document.getElementById('replay-button-end');
+            currentLevel++;
+            // GÜNCELLEME: Dinamik seviye setinin uzunluğunu kontrol et
+            if (currentLevel >= activeLevelSet.length) {
+                currentLevel = 0; 
+            }
             
+            instructionText.textContent = "أَحْسَنْت! لَقَد أَكْمَلْتَ";
             feedbackIcon.textContent = '✔';
+            
             feedbackIcon.className = 'correct';
             feedbackOverlay.classList.add('show');
-
-            currentLevel++; // Seviyeyi artır
-
-            if (currentLevel < activeLevelSet.length) {
-                instructionText.textContent = "أَحْسَنْت! ننتقل للمستوى التالي..."; 
-                replayBtn.style.display = 'none';
-
-                setTimeout(() => {
-                    feedbackOverlay.classList.remove('show');
-                    initializeGame();
-                }, 2000);
-
-            } else {
-                currentLevel = 0; 
-                instructionText.textContent = "مُبَارَك! لَقَد أَنْهَيْتَ اللُّعْبَة"; 
-                replayBtn.style.display = 'block';
-            }
         }
 
         function restartGame() {
@@ -903,7 +931,7 @@
             initializeGame();
         }
 
-        // --- Tam Ekran Fonksiyonları (Orijinal Koddan) ---
+        // --- Tam Ekran Fonksiyonları ---
         function setupFullscreen() {
             const fsBtn = document.getElementById('fullscreen-btn');
             if (!fsBtn) return;
@@ -950,24 +978,31 @@
         // --- Başlangıç ---
         document.addEventListener('DOMContentLoaded', () => {
             
-            // MOBİL KONTROLÜ DEĞİŞİKLİĞİ:
-            // Artık mobilde de zorunlu yatay mod istediğimiz için 
-            // "mobileLevels" (az kelimeli, dar) yerine "allLevelsData" (geniş) kullanıyoruz.
-            // Çünkü telefonu yan çevirince ekran genişliyor.
+            // GÜNCELLEME: Cihaza göre ayarları yükle
+            if (isMobileDevice()) {
+                activeLevelSet = mobileLevels;
+                activeGridCols = mobileGridCols;
+                activeGridRows = mobileGridRows;
+            } else {
+                activeLevelSet = desktopLevels;
+                activeGridCols = desktopGridCols;
+                activeGridRows = desktopGridRows;
+            }
             
-            activeLevelSet = allLevelsData;
-            activeGridCols = desktopGridCols;
-            activeGridRows = desktopGridRows;
-            
+            // Şedde dönüşümünü tüm seviyelere uygula
+            activeLevelSet = preprocessLevels(activeLevelSet); 
+
+            // GÜNCELLEME: CSS değişkenlerini dinamik olarak ayarla
             const rootStyle = document.documentElement.style;
             rootStyle.setProperty('--grid-size-cols', activeGridCols);
             rootStyle.setProperty('--grid-size-rows', activeGridRows);
 
+            // Oyunu başlat
             initializeGame();
             setupFullscreen(); 
         });
 
-    </script>   
+    </script>
 
 </body>
 </html>
